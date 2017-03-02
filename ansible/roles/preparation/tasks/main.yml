@@ -1,0 +1,21 @@
+---
+# tasks file for ansible/roles/preparation
+- sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
+- sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
+- sysctl: name=vm.swappiness value=10 state=present
+- name: Create Cloudera Manager Agent User
+  user:
+    name=cma
+    password=$6$2HOaQ3Ka$2hCKyLse/GSMAi2R1wVUcQmmSobro4Rh3NTD6U5x0O6GE4znjRw4Ir6onXWZDyDrGZY3PzNKdEMJxOZuX.DOU/
+    groups=sudo
+    append=yes
+    shell=/usr/sbin/nologin
+
+- name: Copy Sudoers configuration
+  copy:
+
+- name: Edit fstab
+
+
+- name: Reload Mount Point
+
