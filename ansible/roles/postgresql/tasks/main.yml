@@ -1,0 +1,51 @@
+---
+# tasks file for roles/postgresql
+
+- name: Set Locales
+  shell: {{ item }}
+  with_items:
+    - export LANGUAGE=en_US.UTF-8
+    - export LANG=en_US.UTF-8
+    - export LC_ALL=en_US.UTF-8
+    - locale-gen en_US.UTF-8
+
+- name: Install PostgreSQL
+  apt: pkg=postgresql state=installed update_cache=true
+  register: postgresqlinstalled
+
+- name: Copy Authenication Configuration
+  when: postgresqlinstalled|success
+  copy: src=pg_hba.conf dest=/etc/postgresql/{{ '{{' }} postgresql-version {{ '}}' }}/main owner=root group=root
+  register: configured
+
+- name: Initdb
+  when: configured|success
+  shell: 'sudo service postgresql initdb'
+  register: initialized
+
+- name: Start PGSQL
+  when: initialized|success
+  service: name=postgresql state=started enabled=yes
+
+- name: Copy Performance Configuration
+  when: postgresqlinstalled|success
+  copy: src=postgresql.conf dest=/var/lib/postgresql/data/postgresql.conf owner=root
+ group=root
+
+- name: Create DB Users
+  postresql_user: name={{ item }} password={{ '{{' }} item {{ '}}' }}_password encrypted=true
+  with_items:
+    - "{{ db-services }}"
+
+- name: Create DB Tables
+  postgresql_db: name={{ item }} owner={{ item }} encoding=UTF8
+  with_items:
+    - "{{ db-services }}"
+
+- name: additional shell configuration
+  shell: |
+    sudo -u postgres psql
+    ALTER DATABASE Metastore SET standard_conforming_strings = off;
+
+- name: Reload DB
+  service: name=postgresql state=reloaded
