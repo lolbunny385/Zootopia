@@ -1,4 +1,4 @@
 ---
-- hosts: db
+- hosts: manager1
   roles:
     - postgresql
