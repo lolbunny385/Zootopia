@@ -1,0 +1,12 @@
+---
+# vars file for roles/postgresql
+postgresql-version: 9.3
+db-services:
+   - amon
+   - rman
+   - hive
+   - sentry
+   - nav
+   - navms
+   - sqoop
+   - oozie
