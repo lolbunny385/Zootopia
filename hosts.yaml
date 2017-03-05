@@ -8,7 +8,7 @@
         folder: '/home/vagrant/hosts'
       - name: master1
         box: "ubuntu/trusty64"
-        ram: "512"
+        ram: "2048"
         cpu: "1" 
         ip: "192.168.0.100"
         provision: "worker.sh"

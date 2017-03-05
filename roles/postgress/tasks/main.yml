@@ -1,0 +1,77 @@
+---
+# tasks file for postgress
+- name: " Set Local Variable"
+  shell: "{{ item }}"
+  become: yes
+  with_items:
+   -  "export LANGUAGE=en_US.UTF-8"
+   -  "export LANG=en_US.UTF-8"
+   -  "export LC_ALL=en_US.UTF-8"
+   -  "locale-gen en_US.UTF-8"
+   -  "dpkg-reconfigure locales"
+
+- name: "Add PostgreSQL official APT repository"
+  become: yes
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
+    update_cache: yes
+  tags:
+    - postgresql
+
+- name: "import key"
+  become: yes
+  shell: "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+  sudo apt-key add -"
+
+- name: "update cache"
+  shell: 'sudo apt-get update'
+
+- name: "Install Postgresql"
+  become: yes
+  apt : 
+    name:  "{{ item }}"
+    state: installed
+  with_items:
+   - "postgresql-contrib-9.3"
+   - "psychopy"
+   - "postgresql-9.3"
+
+- name: "ensure postgres' pg_hba is configured"
+  become: yes
+  template: 
+    src: pg_hba.conf.j2 
+    dest: /etc/postgresql/9.3/main/pg_hba.conf
+  notify:
+   - restart postgres
+
+- name: "ensure postgres is configured"
+  become: yes
+  template: 
+    src: postgresql.conf.j2 
+    dest: /etc/postgresql/9.3/main/postgresql.conf
+  notify:
+    - restart postgres
+
+- name: "Start Postgresql"
+  become: yes
+  service:
+    name: "{{ item }}"
+    state: running
+  with_items:
+   - "postgresql"
+
+- name: "start posgresql initdb"
+  shell: "sudo service postgresql initdb start"
+
+#- name: "ensure database is created"
+#  postgresql_db: name={{dbname}}
+
+#- name: "Create Users"
+#postgresql_user: name={{ postgres_username }} password={{ postgres_password }} role_attr_flags=CREATEDB
+#sudo_user: postgres
+
+#- name: "ensure user has access to database"
+#  postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+    
+    
+

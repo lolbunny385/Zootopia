@@ -23,5 +23,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.provision :shell, :path  => servers['provision']
     end
   end
+  
 end
 

@@ -7,6 +7,8 @@ os.system('sudo apt-get install -y ansible')
 os.system('sudo apt-get install openssh-server')
 os.system('ssh-keygen -t rsa -q -f /home/vagrant/.ssh/id_rsa -P ""')
 os.system('sudo cp /home/vagrant/hosts/hosts /etc/hosts')
+os.system('sudo cp /home/vagrant/hosts/ansible_hosts /etc/ansible/hosts')
+os.system('sudo cp /home/vagrant/.ssh/id_rsa.pub /home/vagrant/hosts')
 os.system('sudo service ssh restart')
-
+os.system('sudo /home/vagrant/hosts/scan.py')
 
