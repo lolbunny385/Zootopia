@@ -12,10 +12,9 @@
     shell=/usr/sbin/nologin
 
 - name: Copy Sudoers configuration
-  copy:
+  copy: src=sudoers dest=/etc/sudoers
 
-- name: Edit fstab
-
-
-- name: Reload Mount Point
+#- name: Edit fstab
+#- name: Reload Mount Point
+# Skipped for now
 

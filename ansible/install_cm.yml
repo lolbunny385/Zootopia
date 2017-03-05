@@ -7,7 +7,7 @@
        dest: /etc/apt/sources.list.d/cloudera-manager.list
 
    - name: install packages
-     apt: name={{ item }} update_cache=ues
+     apt: name={{ item }} update_cache=yes
      with_items:
        - oracle-j2sdk1.7
        - cloudera-manager-daemons
