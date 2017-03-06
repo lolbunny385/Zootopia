@@ -1,16 +1,26 @@
 ---
-- hosts: manager1
+- hosts: manager
   tasks:
-   - name: get CMS list file
-     get_url: 
-       url: https://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/cloudera.list
-       dest: /etc/apt/sources.list.d/cloudera-manager.list
+    - name: Execute scm DB preparation script
+      command: /usr/share/cmf/schema/scm_prepare_database.sh postgresql scm scm scm_password
 
-   - name: install packages
-     apt: name={{ item }} update_cache=yes
-     with_items:
-       - oracle-j2sdk1.7
-       - cloudera-manager-daemons
-       - cloudera-manager-server
-   - name: start CM service
-     service: name=cloudera-scm-server state=running
+    - name: get CMS list file
+      get_url: 
+        url: https://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/cloudera.list
+        dest: /etc/apt/sources.list.d/cloudera-manager.list
+
+    - name: install packages
+      apt: 
+        name: '{{ item }}' 
+        update_cache: yes
+        allow_unauthenticated: yes
+      with_items:
+        - oracle-j2sdk1.7
+        - cloudera-manager-daemons
+        - cloudera-manager-server
+   
+    - name: start CM service
+      service: 
+        name: cloudera-scm-server 
+        state: running
+

@@ -2,50 +2,76 @@
 # tasks file for roles/postgresql
 
 - name: Set Locales
-  shell: {{ item }}
+  shell: '{{ item }}'
   with_items:
-    - export LANGUAGE=en_US.UTF-8
-    - export LANG=en_US.UTF-8
-    - export LC_ALL=en_US.UTF-8
-    - locale-gen en_US.UTF-8
+    - 'update-locale LANGUAGE=en_US.UTF-8'
+    - 'update-locale LANG=en_US.UTF-8'
+    - 'update-locale LC_ALL=en_US.UTF-8'
+    - 'locale-gen en_US.UTF-8'
+    - 'dpkg-reconfigure locales'
 
-- name: Install PostgreSQL
-  apt: pkg=postgresql state=installed update_cache=true
-  register: postgresqlinstalled
+- name: Install PostgreSQL and pip
+  apt: 
+    pkg: 
+      - postgresql
+      - python-pip
+      - postgresql-server-dev-9.3
+      - python-dev
+    state: installed 
+    update_cache: true
 
-- name: Copy Authenication Configuration
-  when: postgresqlinstalled|success
-  copy: src=pg_hba.conf dest=/etc/postgresql/{{ '{{' }} postgresql-version {{ '}}' }}/main owner=root group=root
-  register: configured
+- name: Initialize DB cluster
+  shell:  pg_createcluster '{{ postgresql_version }}' main
+  args: 
+    creates: /etc/postgresql/9.3/main/start.conf
 
-- name: Initdb
-  when: configured|success
-  shell: 'sudo service postgresql initdb'
-  register: initialized
+# The Default configuration is ok. If we make an external DB we need to change it
+#- name: Copy Authenication Configuration
+#  when: postgresqlinstalled|success
+#  copy: src=pg_hba.conf dest=/etc/postgresql/{{ '{{' }} postgresql_version {{ '}}' }}/main/pg_hba.conf owner=root group=root
+#  register: configured
 
 - name: Start PGSQL
-  when: initialized|success
   service: name=postgresql state=started enabled=yes
 
+# Takes settings from cloudera. Real consideration is needed before any real deployment
 - name: Copy Performance Configuration
-  when: postgresqlinstalled|success
-  copy: src=postgresql.conf dest=/var/lib/postgresql/data/postgresql.conf owner=root
- group=root
+  copy: 
+    src: postgresql.conf 
+    dest: /etc/postgresql/{{ postgresql_version }}/main/postgresql.conf
+    owner: root
+    group: root
 
-- name: Create DB Users
-  postresql_user: name={{ item }} password={{ '{{' }} item {{ '}}' }}_password encrypted=true
+- name: Install psycopg2
+  pip: name=psycopg2
+
+# Requires Python package psycopg2
+- name: Create Database Users
+  postgresql_user: 
+    name: '{{ item }}' 
+    password: '{{ item }}_password'
+    encrypted: true
   with_items:
-    - "{{ db-services }}"
+    - "{{ db_services }}"
+  become: yes
+  become_user: postgres
 
 - name: Create DB Tables
-  postgresql_db: name={{ item }} owner={{ item }} encoding=UTF8
+  postgresql_db: 
+    name: '{{ item }}' 
+    owner: '{{ item }}'
+    encoding: UTF8
   with_items:
-    - "{{ db-services }}"
+    - "{{ db_services }}"
+  become: yes
+  become_user: postgres
 
 - name: additional shell configuration
-  shell: |
-    sudo -u postgres psql
-    ALTER DATABASE Metastore SET standard_conforming_strings = off;
+  shell: psql -c 'ALTER DATABASE hive SET standard_conforming_strings = off;'
+  become: yes
+  become_user: postgres
 
 - name: Reload DB
-  service: name=postgresql state=reloaded
+  service: 
+    name: postgresql 
+    state: reloaded

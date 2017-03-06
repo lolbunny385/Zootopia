@@ -1,7 +1,7 @@
 ---
 # vars file for roles/postgresql
-postgresql-version: 9.3
-db-services:
+postgresql_version: '9.3'
+db_services:
    - amon
    - rman
    - hive
@@ -10,3 +10,4 @@ db-services:
    - navms
    - sqoop
    - oozie
+   - scm
