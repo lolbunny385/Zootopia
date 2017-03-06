@@ -1,2 +1,14 @@
 ---
 # defaults file for roles/postgresql
+postgresql_version: '9.3'
+db_services:
+   - amon
+   - rman
+   - hive
+   - sentry
+   - nav
+   - navms
+   - sqoop
+   - oozie
+   - scm
+
