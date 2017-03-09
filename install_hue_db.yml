@@ -1,0 +1,6 @@
+---
+- hosts: edge
+  vars:
+   - db_services: hue
+  roles:
+   - postgresql

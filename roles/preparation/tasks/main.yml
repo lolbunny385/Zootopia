@@ -1,0 +1,32 @@
+---
+# tasks file for ansible/roles/preparation
+- sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
+- sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
+- sysctl: name=vm.swappiness value=10 state=present
+- name: Create Cloudera Manager Agent User
+  user:
+    name=cma
+    password=$6$2HOaQ3Ka$2hCKyLse/GSMAi2R1wVUcQmmSobro4Rh3NTD6U5x0O6GE4znjRw4Ir6onXWZDyDrGZY3PzNKdEMJxOZuX.DOU/
+    groups=sudo
+    append=yes
+    shell=/bin/bash
+
+- name: Copy Sudoers configuration
+  copy: src=sudoers dest=/etc/sudoers
+
+- name: Copy /etc/hosts configuration
+  copy: src=hosts dest=/etc/hosts
+
+- name: install apt-fast
+  shell:  /bin/bash -c "$(curl -sL https://git.io/vokNn)"
+
+- name: get CMS list file
+  get_url:
+    url: https://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/cloudera.list
+    dest: /etc/apt/sources.list.d/cloudera-manager.list
+
+- apt:
+    update_cache: yes
+
+- name: install packages
+  shell: apt-fast install -y oracle-j2sdk1.7 cloudera-manager-agent 
