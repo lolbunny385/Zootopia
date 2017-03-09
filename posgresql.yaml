@@ -1,4 +1,0 @@
----
-- hosts: master2
-  roles:
-  - postgress

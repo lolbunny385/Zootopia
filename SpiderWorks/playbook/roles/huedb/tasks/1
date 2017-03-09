@@ -1,0 +1,38 @@
+---
+# tasks file for postgress
+- name: " Set Local Variable"
+  shell: {{ item }}
+  with_items:
+  -  "export LANGUAGE=en_US.UTF-8"
+  -  "export LANG=en_US.UTF-8"
+  -  "export LC_ALL=en_US.UTF-8"
+  -  "locale-gen en_US.UTF-8"
+  - "dpkg-reconfigure locales"
+ 
+- name: "Add PostgreSQL official APT repository"
+  become: yes
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_distribution_release}}-pgdg main"
+  tags:
+    - postgresql
+- name: "Install PostgreSQL"
+  become: yes
+  apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ansible_distribution_release}}-pgdg main"
+  tags:
+    - postgresql
+  - name: Install PostgreSQL
+  become: yes
+  apt:
+    name: "postgresql-{{postgresql_version}}"
+    state: present
+    update_cache: yes
+  tags:
+    - postgresql
+
+  - name: "ensure database is created"
+    postgresql_db: name={{dbname}}
+
+  - name: "ensure user has access to database"
+    postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+

@@ -1,4 +1,0 @@
----
- - hosts: manager1
-   roles: 
-   - preinstall
