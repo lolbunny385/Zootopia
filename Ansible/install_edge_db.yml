@@ -1,0 +1,9 @@
+---
+- hosts: edge
+  vars:
+   - db_services: 
+       - hue
+       - sqoop
+       - oozie
+  roles:
+   - postgresql
