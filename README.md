@@ -1,2 +1,0 @@
-# Zootopia
-Hadoop deployment automation
