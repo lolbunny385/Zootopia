@@ -1,0 +1,17 @@
+---
+- hosts: cluster
+  tasks: 
+  - name: " start install pre install"
+    include: preinstall.yaml
+  
+  - name: " install CM DB"
+    include: CM_DB.yaml
+  
+  - name: "Install Hue DB"
+    include: Hue_DB.yaml
+
+  - name: "Install CM Server"
+    include: CM.yaml
+
+  - name: "Conf NOatime to workers"
+    include: noatime.yaml
