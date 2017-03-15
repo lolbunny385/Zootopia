@@ -1,8 +1,0 @@
----
-# defaults file for postgress
-# defaults file for roles/postgresql
-postgresql_version: '9.3'
-db_services:
-- hue
-- sqoop
-  
