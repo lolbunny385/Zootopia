@@ -9,11 +9,10 @@
       become: yes
       apt: 
         name: '{{ item }}' 
-        update_cache: yes
         allow_unauthenticated: yes
       with_items:
-        - cloudera-manager-server
-        - cloudera-manager-daemon
+        - "cloudera-manager-server"
+        - "cloudera-manager-daemons"
       tags: install_cm
 
     - name: "Config DB With Hadoop"

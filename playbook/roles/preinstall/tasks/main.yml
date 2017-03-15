@@ -54,12 +54,12 @@
 - name: "Install JDK"
   become: yes
   apt:
-    name: '{{ item }}' 
+    name: oracle-j2sdk1.7
     state: installed
     allow_unauthenticated: yes
-  with_items:
-    - oralce-j2sdk1.7
-    - oralce-j2sdk1.6
+  #with_items:
+  #- oralce-j2sdk1.7
+  #- oralce-j2sdk1.6
   tags: jdk
 
 - name: " install Cloudera Manager Agent"

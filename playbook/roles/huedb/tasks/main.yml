@@ -9,37 +9,41 @@
    - 'update-locale LC_ALL=en_US.UTF-8'
    -  "locale-gen en_US.UTF-8"
    -  "dpkg-reconfigure locales"
+  tags: variable
 
 - name: "Install PostgreSQL"
   become: yes
   apt: 
     pkg: 
-      - postgresql-9.4
+      - postgresql-9.3
       - python-pip
-      - postgresql-server-dev-9.4
+      - postgresql-server-dev-9.3
       - python-dev
     state: installed 
     update_cache: true
-
+  tags: postgres
 
 - name: "Install psycopg2"
   become: yes
   pip: 
     name: psycopg2 
+  tags: postgres
 
 
 - name: "Intialize DB CLuster"
   shell: pg_createcluster '{{ postgresql_version }}' main
   args: 
-    creates: /etc/postgresql/9.4/main/start.conf
+    creates: /etc/postgresql/9.3/main/start.conf
+  tags: cluster
 
 - name: "ensure postgres pg_hba is configured"
   become: yes
   copy: 
     src: "pg_hba.conf" 
-    dest: "/etc/postgresql/9.4/main/pg_hba.conf"
-    owner: root
-    group: root
+    dest: "/etc/postgresql/9.3/main/pg_hba.conf"
+    owner: postgres
+    group: postgres
+  tags: file
   notify:
    - restart postgres
 
@@ -47,9 +51,10 @@
   become: yes
   copy: 
     src: "postgresql.conf"
-    dest: "/etc/postgresql/9.4/main/postgresql.conf"
-    owner: root
-    group: root
+    dest: "/etc/postgresql/9.3/main/postgresql.conf"
+    owner: postgres
+    group: postgres
+  tags: file
   notify:
     - restart postgres
 
@@ -62,6 +67,7 @@
     - "{{ db_services }}"
   become: yes
   become_user: postgres
+  tags: create_user
 
 - name: "Create DB "
   postgresql_db: 
@@ -72,15 +78,14 @@
     - "{{ db_services }}"
   become: yes
   become_user: postgres
+  tags: create_db
 
 - name: "Reloaded Postgres"
   become: yes
   become_user: postgres
-  service: 
+  service:
     name: postgresql
-    state: reloaded
+    state: restarted
+  tags: reload
 
-- name: "Additional shell configuration For Hive MetaStore"
-  shell: psql -c 'ALTER DATABASE hive SET standard_conforming_strings = off;'
-  become_user: postgres
 

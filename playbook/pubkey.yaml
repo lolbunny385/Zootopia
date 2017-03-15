@@ -2,4 +2,7 @@
 - hosts: cluster
   tasks:
   - name: "Set authorized key took from file"
-    shell: echo vagrant | ssh-copy-id vagrant@{{ ansible_host }}
+    authorized_key:
+      user: vagrant
+      state: present
+      key: "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"

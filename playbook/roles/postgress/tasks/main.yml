@@ -15,9 +15,9 @@
   become: yes
   apt: 
     pkg: 
-      - postgresql-9.4
+      - postgresql-9.3
       - python-pip
-      - postgresql-server-dev-9.4
+      - postgresql-server-dev-9.3
       - python-dev
     state: installed 
     update_cache: true
@@ -33,14 +33,14 @@
 - name: "Intialize DB CLuster"
   shell: pg_createcluster '{{ postgresql_version }}' main
   args: 
-    creates: /etc/postgresql/9.4/main/start.conf
+    creates: /etc/postgresql/9.3/main/start.conf
   tags: cluster
 
 - name: "ensure postgres pg_hba is configured"
   become: yes
   copy: 
     src: "pg_hba.conf" 
-    dest: "/etc/postgresql/9.4/main/pg_hba.conf"
+    dest: "/etc/postgresql/9.3/main/pg_hba.conf"
     owner: postgres
     group: postgres
   tags: file
@@ -51,7 +51,7 @@
   become: yes
   copy: 
     src: "postgresql.conf"
-    dest: "/etc/postgresql/9.4/main/postgresql.conf"
+    dest: "/etc/postgresql/9.3/main/postgresql.conf"
     owner: postgres
     group: postgres
   tags: file
@@ -91,6 +91,7 @@
   become_user: postgres
   service:
     name: postgresql
-    state: reloaded
+    state: restarted
+  tags: reload
 
 
