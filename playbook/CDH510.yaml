@@ -1,6 +1,8 @@
 ---
-- hosts: cluster
+- name: " install All Of The Hadoop ecossystem"
+  hosts: all
   tasks: 
+
   - name: " start install pre install"
     include: preinstall.yaml
   
@@ -12,6 +14,3 @@
 
   - name: "Install CM Server"
     include: CM.yaml
-
-  - name: "Conf NOatime to workers"
-    include: noatime.yaml
