@@ -22,3 +22,8 @@ manager2
 worker1
 worker2
 worker3
+
+[db]
+manager1
+manager2
+edge
