@@ -1,0 +1,18 @@
+---
+- hosts: db
+  vars:
+    primarynode: manager1
+    db_services:
+      - amon
+      - rman
+      - hive
+      - sentry
+      - nav
+      - navms
+      - sqoop
+      - oozie
+      - scm
+      - hue
+    cluster_hosts: 192.168.0.102,192.168.0.104,192.168.0.109
+  roles:
+   - galera

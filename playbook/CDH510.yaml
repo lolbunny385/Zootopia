@@ -1,16 +1,12 @@
 ---
-- name: " install All Of The Hadoop ecossystem"
-  hosts: all
-  tasks: 
+- name: "Preinstallation"
+  include: preinstall.yaml
 
-  - name: " start install pre install"
-    include: preinstall.yaml
-  
-  - name: " install CM DB"
-    include: CM_DB.yaml
-  
-  - name: "Install Hue DB"
-    include: Hue_DB.yaml
+- name: "Galera Cluster"
+  include: galera.yml
 
-  - name: "Install CM Server"
-    include: CM.yaml
+- name: "Install CM Server"
+  include: CM.yaml
+
+- name: Noatime
+  include: noatime.yaml

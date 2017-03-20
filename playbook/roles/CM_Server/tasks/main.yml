@@ -1,23 +1,18 @@
 ---
-    - name: "Get CMS list file"
-      become: yes
-      get_url: 
-        url: "https://archive.cloudera.com/cm5/ubuntu/trusty/amd64/cm/cloudera.list"
-        dest: "/etc/apt/sources.list.d/cloudera-manager.list"
-
     - name: install packages
       become: yes
       apt: 
         name: '{{ item }}' 
         allow_unauthenticated: yes
+        update_cache: yes
       with_items:
         - "cloudera-manager-server"
         - "cloudera-manager-daemons"
       tags: install_cm
 
-    - name: "Config DB With Hadoop"
+    - name: "Prepare DB for CM"
       become: yes
-      shell: /usr/share/cmf/schema/scm_prepare_database.sh postgresql scm scm scm_password
+      shell: /usr/share/cmf/schema/scm_prepare_database.sh mysql scm scm scm_password
       tags: config_db
   
     - name: "Start CM service"

@@ -1,0 +1,93 @@
+---
+# tasks file for roles/galera
+
+#- name: add MariaDB repo
+#  apt_key:
+#    keyserver: keyserver.ubuntu.com
+#    id: 0xCBCB082A1BB943DB
+#  apt_repository:   
+#    repo: deb [arch=amd64,i386,ppc64el] http://ftp.cc.uoc.gr/mirrors/mariadb/repo/10.0/ubuntu trusty main
+#    state: present
+
+- name: Install MariaDB
+  environment:
+    DEBIAN_FRONTEND: "noninteractive"
+  apt: 
+    pkg: 
+      - mariadb-galera-server
+      - python-mysqldb
+      - libmysql-java
+      - rsync
+    state: installed 
+    update_cache: true
+    force: yes
+    allow_unauthenticated: yes
+  register: installed
+
+- name: Copy Configuration
+  template: 
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+  when: installed|success
+
+#- name: Copy Galera Configuration
+#  template:
+#    src: galera.cnf.j2
+#    dest: /etc/mysql/conf.d/galera.cnf
+#    owner: root
+#    group: root
+
+- name: stop MariaDB
+  service:
+    name: mysql
+    state: stopped
+
+- name: copy maintenance user configuration to all hosts
+  copy:
+    src: debian.cnf
+    dest: /etc/mysql/debian.cnf
+
+- name: Bootstap new cluster
+  shell: nohup service mysql start --wsrep-new-cluster
+  when: ansible_hostname == primarynode
+
+- name: "Debug DB access"
+  shell:
+    mysql -h localhost -u root -pAa123456
+  when: ansible_hostname == primarynode
+  register: can_connect
+  ignore_errors: true
+
+- name: Secure Installation
+  when: ansible_hostname == primarynode and can_connect|failed
+  include: ./secure_installation.yml
+
+- name: Start Secondary Nodes
+  service:
+    enabled: yes
+    name: mysql
+    state: started
+  when: not ansible_hostname == primarynode
+
+- name: Create DB Tables
+  when: ansible_hostname == primarynode
+  mysql_db:
+    name: '{{ item }}'
+    login_password: Aa123456
+    encoding: UTF8
+  with_items:
+    - "{{ db_services }}"
+
+- name: Create Database Users
+  when: ansible_hostname == primarynode
+  mysql_user:
+    name: '{{ item }}'
+    password: '{{ item }}_password'
+    login_password: Aa123456
+    priv: "{{item}}.*:ALL"
+  with_items:
+    - "{{ db_services }}"
+  tags: users
+
