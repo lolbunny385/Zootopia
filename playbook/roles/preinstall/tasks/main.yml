@@ -48,20 +48,24 @@
   - agent 
   - jdk
 
+- name: "Auto aceept JDK"
+     shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
 - name: "Install and CMA"
   apt:
     name:
+      - oracle-java8-installer
       - cloudera-manager-agent
     state: installed
     allow_unauthenticated: yes
   tags: installs
 
-- name: "Install JDK from tarball"
-  copy:
-    src: jdk1.8.0_112
-    dest: /usr/java/jdk1.8.0_112
+#- name: "Install JDK from tarball"
+#  copy:
+#    src: jdk1.8.0_112
+#    dest: /usr/java/jdk1.8.0_112
 
-- name: "Java_HOME Variables"
-  shell: | 
-  export JAVA_HOME=/usr/java/jdk1.8.0_112
-  export JRE_HOME=/usr/java/jdk1.8.0_112/jre
+#- name: "Java_HOME Variables"
+#  shell: | 
+#  export JAVA_HOME=/usr/java/jdk1.8.0_112
+#  export JRE_HOME=/usr/java/jdk1.8.0_112/jre
