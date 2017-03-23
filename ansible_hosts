@@ -27,3 +27,7 @@ worker3
 manager1
 manager2
 edge
+
+[proxy]
+edge
+manager2

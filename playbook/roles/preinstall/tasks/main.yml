@@ -1,30 +1,38 @@
 ---
 # tasks file for preinstall
 - name: "Disable IPV6"
-  become: yes
   sysctl: name=net.ipv6.conf.all.disable_ipv6 value=1 state=present
-  sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
+- sysctl: name=net.ipv6.conf.default.disable_ipv6 value=1 state=present
 
-- name: "Performance Optimization"
-  become: yes
+- name: "Configure Swappiness"
   sysctl:
     name: vm.swappiness
     value: 1
     state: present
+  tags: performance
+
+- name: Disable transparent hugepage
   lineinfile:
     name: /etc/rc.local
     line: "echo never > /sys/kernel/mm/transparent_hugepage/defrag"
   tags: performance
 
+- name: "enable no atime"
+  mount:
+    name: "/"
+    src: "/dev/sda1"
+    fstype: "ext4"
+    state: present
+    opts: noatime,defualt
+  tags: performance
+
 - name: "Set Full Privilage to cma user"
-  become: yes
   copy:
     src: sudoers
     dest: /etc/sudoers
   tags: cma
 
 - name: "Create Cloudera Manager Service User"
-  become: yes
   user:
     name: cma
     password: $6$eM1eZChnXKftJP$hVLcu3lx6FmGr4H3w1dVBh.dOhC6OJz0gFvM0vYkYJK9HjUGDfuTxmgXubN.SiYm2S.1VMjmYy9PSymM4BawU.
@@ -33,7 +41,6 @@
   tags: cma
 
 - name: "Get local repository"
-  become: yes
   apt_repository:
     repo: deb http://192.168.1.14/debs/ amd64/
     state: present
@@ -41,18 +48,20 @@
   - agent 
   - jdk
 
-- name: "Install JDK and CMA"
-  become: yes
+- name: "Install and CMA"
   apt:
     name:
-      - oracle-j2sdk1.7
       - cloudera-manager-agent
     state: installed
     allow_unauthenticated: yes
-    update_cache: yes
   tags: installs
 
+- name: "Install JDK from tarball"
+  copy:
+    src: jdk1.8.0_112
+    dest: /usr/java/jdk1.8.0_112
 
-
- 
-  
+- name: "Java_HOME Variables"
+  shell: | 
+  export JAVA_HOME=/usr/java/jdk1.8.0_112
+  export JRE_HOME=/usr/java/jdk1.8.0_112/jre

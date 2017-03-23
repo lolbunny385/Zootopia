@@ -1,4 +1,4 @@
-automatically generated for Debian scripts. DO NOT TOUCH!
+#automatically generated for Debian scripts. DO NOT TOUCH!
 [client]
 host     = localhost
 user     = debian-sys-maint

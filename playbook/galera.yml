@@ -3,7 +3,6 @@
   vars:
     primarynode: manager1
     db_services:
-      - amon
       - rman
       - hive
       - sentry

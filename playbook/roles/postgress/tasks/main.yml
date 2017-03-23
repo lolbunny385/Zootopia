@@ -85,8 +85,9 @@
   become_user: postgres
   shell: psql -c 'ALTER DATABASE hive SET standard_conforming_strings = off; '
   tags: add_hive
+  when: 'hive' in {{ db_services }}
 
-- name: "Reloaded Postgres"
+- name: "restart Postgres"
   become: yes
   become_user: postgres
   service:

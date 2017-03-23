@@ -8,5 +8,5 @@
 - name: "Install CM Server"
   include: CM.yaml
 
-- name: Noatime
-  include: noatime.yaml
+- name: HAProxy
+  include: haproxy.yaml

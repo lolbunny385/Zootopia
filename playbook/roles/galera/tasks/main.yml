@@ -32,22 +32,10 @@
     group: root
   when: installed|success
 
-#- name: Copy Galera Configuration
-#  template:
-#    src: galera.cnf.j2
-#    dest: /etc/mysql/conf.d/galera.cnf
-#    owner: root
-#    group: root
-
 - name: stop MariaDB
   service:
     name: mysql
     state: stopped
-
-- name: copy maintenance user configuration to all hosts
-  copy:
-    src: debian.cnf
-    dest: /etc/mysql/debian.cnf
 
 - name: Bootstap new cluster
   shell: nohup service mysql start --wsrep-new-cluster
@@ -63,6 +51,29 @@
 - name: Secure Installation
   when: ansible_hostname == primarynode and can_connect|failed
   include: ./secure_installation.yml
+
+- name: "Get debian.cnf from the master quorum server"
+  fetch:
+    src: /etc/mysql/{{ item }}
+    dest: /tmp/
+    flat: yes
+    fail_on_missing: yes
+  with_items:
+  - debian.cnf
+  when: is_primary_controller
+  tags:
+  - restart
+  - restart_mysql
+
+- name: "Distribute debian.cnf to all Galera cluster nodes"
+  copy:
+    src: /tmp/{{ item }}
+    dest: /etc/mysql/
+  with_items:
+  - debian.cnf
+  tags:
+  - restart
+  - restart_mysql
 
 - name: Start Secondary Nodes
   service:
@@ -89,5 +100,11 @@
     priv: "{{item}}.*:ALL"
   with_items:
     - "{{ db_services }}"
+  tags: users
+
+- name: Create HAproxy user
+  when: ansible_hostname == primarynode
+  mysql_user:
+    name: haproxy
   tags: users
 
