@@ -60,7 +60,7 @@
     fail_on_missing: yes
   with_items:
   - debian.cnf
-  when: is_primary_controller
+  when: ansible_hostname == primarynode
   tags:
   - restart
   - restart_mysql
@@ -106,5 +106,6 @@
   when: ansible_hostname == primarynode
   mysql_user:
     name: haproxy
+    login_password: Aa123456
   tags: users
 

@@ -22,8 +22,8 @@
     name: "/"
     src: "/dev/sda1"
     fstype: "ext4"
-    state: present
-    opts: noatime,defualt
+    state: mounted
+    opts: noatime,defualts
   tags: performance
 
 - name: "Set Full Privilage to cma user"
@@ -49,7 +49,7 @@
   - jdk
 
 - name: "Auto aceept JDK"
-     shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+  shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 
 - name: "Install and CMA"
   apt:

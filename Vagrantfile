@@ -21,6 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         srv.vm.network :forwarded_port, guest: 5432, host: 7002
       end
       srv.vm.provider :virtualbox do |vb|
+        vb.name = servers['name']
         vb.memory = servers['ram']
         vb.gui = true
         vb.cpus = servers['cpu']

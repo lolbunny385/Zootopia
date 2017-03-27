@@ -1,7 +1,7 @@
 ---
       - name: master1
         box: "ubuntu/trusty64"
-        ram: "1200"
+        ram: "2000"
         cpu: "2" 
         ip: "192.168.0.100"
         provision: "worker.sh"
@@ -9,7 +9,7 @@
 
       - name: master2
         box: "ubuntu/trusty64"
-        ram: "1200"
+        ram: "2000"
         cpu: "1" 
         ip: "192.168.0.101"
         provision: "worker.sh"
@@ -17,7 +17,7 @@
 
       - name: manager1
         box: "ubuntu/trusty64"
-        ram: "3096"
+        ram: "4000"
         cpu: "2" 
         ip: "192.168.0.102"
         provision: "worker.sh"
@@ -25,7 +25,7 @@
 
       - name: manager2
         box: "ubuntu/trusty64"
-        ram: "3048"
+        ram: "6000"
         cpu: "2"
         ip: "192.168.0.109"
         provision: "worker.sh"
@@ -33,7 +33,7 @@
 
       - name: edge
         box: "ubuntu/trusty64"
-        ram: "1500"
+        ram: "3000"
         cpu: "1" 
         ip: "192.168.0.104"
         provision: "worker.sh"
@@ -41,7 +41,7 @@
 
       - name: worker1
         box: "ubuntu/trusty64"
-        ram: "1000"
+        ram: "1500"
         cpu: "1" 
         ip: "192.168.0.105"
         provision: "worker.sh"
@@ -49,7 +49,7 @@
 
       - name: worker2
         box: "ubuntu/trusty64"
-        ram: "1000"
+        ram: "1500"
         cpu: "1" 
         ip: "192.168.0.106"
         provision: "worker.sh"
@@ -57,7 +57,7 @@
 
       - name: worker3
         box: "ubuntu/trusty64"
-        ram: "1000"
+        ram: "1500"
         cpu: "1" 
         ip: "192.168.0.107"
         provision: "worker.sh"

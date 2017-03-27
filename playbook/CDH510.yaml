@@ -9,4 +9,4 @@
   include: CM.yaml
 
 - name: HAProxy
-  include: haproxy.yaml
+  include: haproxy.yml
