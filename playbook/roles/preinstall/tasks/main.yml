@@ -17,13 +17,13 @@
     line: "echo never > /sys/kernel/mm/transparent_hugepage/defrag"
   tags: performance
 
-- name: "enable no atime"
+- name: "enable noatime"
   mount:
     name: "/"
     src: "/dev/sda1"
     fstype: "ext4"
     state: mounted
-    opts: noatime,defualts
+    opts: noatime
   tags: performance
 
 - name: "Set Full Privilage to cma user"
@@ -48,24 +48,15 @@
   - agent 
   - jdk
 
-- name: "Auto aceept JDK"
+- name: "Auto accept JDK"
   shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 
-- name: "Install and CMA"
+- name: "Install JDK and CMA"
   apt:
     name:
       - oracle-java8-installer
       - cloudera-manager-agent
+      - ntp
     state: installed
     allow_unauthenticated: yes
   tags: installs
-
-#- name: "Install JDK from tarball"
-#  copy:
-#    src: jdk1.8.0_112
-#    dest: /usr/java/jdk1.8.0_112
-
-#- name: "Java_HOME Variables"
-#  shell: | 
-#  export JAVA_HOME=/usr/java/jdk1.8.0_112
-#  export JRE_HOME=/usr/java/jdk1.8.0_112/jre

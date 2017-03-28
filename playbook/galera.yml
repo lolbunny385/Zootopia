@@ -8,10 +8,9 @@
       - sentry
       - nav
       - navms
-      - sqoop
       - oozie
       - scm
       - hue
-    cluster_hosts: 192.168.0.102,192.168.0.104,192.168.0.109
+    cluster_hosts: 192.168.0.102,192.168.0.104,192.168.0.103
   roles:
    - galera

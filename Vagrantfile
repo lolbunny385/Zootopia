@@ -8,6 +8,11 @@ servers = YAML.load_file('hosts.yaml')
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
+  config.hostmanager.enabled = true
+  config.hostmanager.manage_host = true
+  config.hostmanager.manage_guest = true
+  config.hostmanager.include_offline = true
+
   # Iterate through entries in YAML file
   servers.each do |servers|
     config.vm.define servers['name'] do |srv|

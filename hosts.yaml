@@ -27,7 +27,7 @@
         box: "ubuntu/trusty64"
         ram: "6000"
         cpu: "2"
-        ip: "192.168.0.109"
+        ip: "192.168.0.103"
         provision: "worker.sh"
         folder: '/home/vagrant/hosts'
 
@@ -63,12 +63,18 @@
         provision: "worker.sh"
         folder: '/home/vagrant/hosts'
 
-      - name: gw
+      - name: gw1
         box: "ubuntu/trusty64"
-        ram: "512"
+        ram: "1000"
         cpu: "1"
         ip: "192.168.0.108"
         provision: "gw.sh"
         folder: '/home/vagrant/hosts'
-                                                                                                                                                                                                          
-~                                        
+
+      - name: gw2
+        box: "ubuntu/trusty64"
+        ram: "1000"
+        cpu: "1"
+        ip: "192.168.0.109"
+        provision: "worker.sh"
+        folder: '/home/vagrant/hosts'

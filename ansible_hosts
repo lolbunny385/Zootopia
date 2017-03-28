@@ -29,5 +29,5 @@ manager2
 edge
 
 [proxy]
-edge master=True
-manager2 master=False
+gw1 master=True
+gw2 master=False

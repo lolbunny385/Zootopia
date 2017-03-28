@@ -36,10 +36,18 @@
   service:
     name: mysql
     state: stopped
+    enabled: yes
 
 - name: Bootstap new cluster
   shell: nohup service mysql start --wsrep-new-cluster
   when: ansible_hostname == primarynode
+
+ - name: Start Secondary Nodes
+ service:
+   enabled: yes
+   name: mysql
+   state: started
+ when: not ansible_hostname == primarynode
 
 - name: "Debug DB access"
   shell:
@@ -77,7 +85,6 @@
 
 - name: Start Secondary Nodes
   service:
-    enabled: yes
     name: mysql
     state: started
   when: not ansible_hostname == primarynode
