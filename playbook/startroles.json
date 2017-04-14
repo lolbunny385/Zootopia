@@ -1,0 +1,13 @@
+{ 
+"name": "start",
+"active":true,
+"serviceRef": {
+"serviceName":"mgmt"},
+"roleRef": {
+"roleName": 
+  ["ALERTPUBLISHER","HOSTMONITOR","HOSTMONITOR","REPORTSMANAGER","EVENTSERVER","NAVIGATOR","NAVIGATORSERVER"]
+}
+}
+
+
+"hostId": "c1b64362-b62e-436c-b97a-d0de239b2ddb"

@@ -1,4 +1,3 @@
-gw
 master1
 master2
 edge
@@ -7,4 +6,5 @@ manager2
 worker1
 worker2
 worker3
-
+gw1
+gw2
