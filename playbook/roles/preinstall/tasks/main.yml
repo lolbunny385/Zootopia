@@ -45,6 +45,7 @@
     repo: deb http://192.168.1.14/debs/ amd64/
     state: present
   tags:
+  - repo
   - agent 
   - jdk
 
@@ -54,6 +55,8 @@
 - name: "Install JDK and CMA"
   apt:
     name:
+      - oracle-j2sdk1.7
+      - oracle-j2sdk1.6
       - oracle-java8-installer
       - cloudera-manager-agent
       - ntp

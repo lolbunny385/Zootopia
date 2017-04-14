@@ -1,5 +1,6 @@
 ---
 - hosts: db
+  become: yes
   vars:
     primarynode: manager1
     db_services:

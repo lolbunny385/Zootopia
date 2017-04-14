@@ -1,13 +1,13 @@
 #automatically generated for Debian scripts. DO NOT TOUCH!
 [client]
 host     = localhost
-user     = debian-sys-maint
-password = xytUuHQp4eoiwsdm
+user     = debian-sys
+password = {{ cluster_passowrd }}
 socket   = /var/run/mysqld/mysqld.sock
 [mysql_upgrade]
 host     = localhost
 user     = debian-sys-maint
-password = xytUuHQp4eoiwsdm
+password = {{ cluster_password }}
 socket   = /var/run/mysqld/mysqld.sock
 basedir  = /usr
 

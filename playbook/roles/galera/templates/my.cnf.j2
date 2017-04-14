@@ -38,14 +38,14 @@ innodb_log_file_size = 512M
 binlog_format=ROW
 default-storage-engine=innodb
 innodb_autoinc_lock_mode=2
-bind-address=0.0.0.0
+bind-address= 0.0.0.0
 
 # Galera Provider Configuration
 wsrep_on=ON
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 
 # Galera Cluster Configuration
-wsrep_cluster_name="Hadoop DB"
+wsrep_cluster_name= {{ cluster_name }}
 wsrep_cluster_address="gcomm://{{ cluster_hosts }}"
 
 # Galera Synchronization Configuration
@@ -54,7 +54,5 @@ wsrep_sst_method=rsync
 # Galera Node Configuration
 wsrep_node_address={{ facter_ipaddress_eth1 }}
 wsrep_node_name={{ ansible_hostname }}
-
 #[mysqld_safe]
 #log-error=/var/log/mariadb/mariadb.log
-#pid-file=/var/run/mariadb/mariadb.pid

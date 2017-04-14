@@ -1,7 +1,7 @@
 ---
       - name: master1
         box: "ubuntu/trusty64"
-        ram: "2000"
+        ram: "2500"
         cpu: "2" 
         ip: "192.168.0.100"
         provision: "worker.sh"
@@ -9,7 +9,7 @@
 
       - name: master2
         box: "ubuntu/trusty64"
-        ram: "2000"
+        ram: "2500"
         cpu: "1" 
         ip: "192.168.0.101"
         provision: "worker.sh"
@@ -41,7 +41,7 @@
 
       - name: worker1
         box: "ubuntu/trusty64"
-        ram: "1500"
+        ram: "1000"
         cpu: "1" 
         ip: "192.168.0.105"
         provision: "worker.sh"
@@ -49,7 +49,7 @@
 
       - name: worker2
         box: "ubuntu/trusty64"
-        ram: "1500"
+        ram: "1000"
         cpu: "1" 
         ip: "192.168.0.106"
         provision: "worker.sh"
@@ -57,9 +57,17 @@
 
       - name: worker3
         box: "ubuntu/trusty64"
-        ram: "1500"
+        ram: "1000"
         cpu: "1" 
         ip: "192.168.0.107"
+        provision: "worker.sh"
+        folder: '/home/vagrant/hosts'
+
+      - name: gw2
+        box: "ubuntu/trusty64"
+        ram: "1000"
+        cpu: "1"
+        ip: "192.168.0.109"
         provision: "worker.sh"
         folder: '/home/vagrant/hosts'
 
@@ -69,12 +77,4 @@
         cpu: "1"
         ip: "192.168.0.108"
         provision: "gw.sh"
-        folder: '/home/vagrant/hosts'
-
-      - name: gw2
-        box: "ubuntu/trusty64"
-        ram: "1000"
-        cpu: "1"
-        ip: "192.168.0.109"
-        provision: "worker.sh"
         folder: '/home/vagrant/hosts'

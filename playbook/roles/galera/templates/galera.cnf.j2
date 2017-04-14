@@ -9,7 +9,7 @@ wsrep_on=ON
 wsrep_provider=/usr/lib/galera/libgalera_smm.so
 
 # Galera Cluster Configuration
-wsrep_cluster_name="Hadoop DB"
+wsrep_cluster_name= {{ cluster_name }}
 wsrep_cluster_address="gcomm://{{ cluster_hosts }}"
 
 # Galera Synchronization Configuration

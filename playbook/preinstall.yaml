@@ -1,4 +1,5 @@
 ---
  - hosts: cluster
+   become: yes
    roles: 
    - preinstall

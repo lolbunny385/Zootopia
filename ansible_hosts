@@ -1,27 +1,28 @@
 [manage]
-gw
+gw1 manage=True
 
 [cluster:children]
-manager
-edges
+manager 
+edges 
 masters
 workers
+proxy
 
 [masters]
-master1
-master2
+master1 manage=False
+master2 manage=False
 
 [edges]
-edge
+edge Journal=True manage=False
 
 [manager]
-manager1
-manager2
+manager1 Journal=True manage=False
+manager2 Journal=True manage=False
 
 [workers]
-worker1
-worker2
-worker3
+worker1 manage=False
+worker2 manage=False
+worker3 manage=False
 
 [db]
 manager1
@@ -30,4 +31,13 @@ edge
 
 [proxy]
 gw1 master=True
-gw2 master=False
+gw2 master=False manage=False
+
+[journal:children]
+manager
+edges
+
+[all:vars]
+ansible_ssh_pass=vagrant
+ansible_sudo_pass=vagrant
+ansible_ssh_user=vagrant
