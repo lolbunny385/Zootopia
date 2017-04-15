@@ -1,0 +1,15 @@
+---
+- hosts: cluster
+  become: yes
+  tasks:
+  - name: copy /etc/hosts file
+    copy:
+      src: /home/vagrant/hosts/hosts
+      dest: /etc/hosts
+  - lineinfile: 
+      dest: /etc/hosts
+      regexp: ^127
+      line: 127.0.0.1 localhost
+  - service: 
+      name: cloudera-scm-agent
+      state: restarted
