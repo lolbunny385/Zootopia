@@ -5,9 +5,9 @@ in this project we have two way for deploying our CDH:
 - Minimal - deploying CDH with core machines and without HA .this deployment is used for testing.
 
 ### let's take a look on the deployment process:
-- `A` clone the repository to your local machine in path `/home/vagrant/(minimal/fullstack)/` using the command `git clone`.
+- `A` we should bring up the machines. We are deploying the machines using vagrant tool, so you should install the latest relase of virtualbox and vagrant.
+- `B` clone the repository to your local machine in path `/home/vagrant/(minimal/fullstack)/` using the command `git clone`.
   > $ git clone https://github.com/lolbunny385/Zootopia/ /home/vagrant/(minimal/fullstack)
-- `B` we should bring up the machines. We are deploying the machines using vagrant tool, so you should install the latest relase of virtualbox and vagrant.
 - `C` , go to path /home/vagrant/(minimal/fullstack) and press the command `$ vagrant up` ,this processs will provision for you the needed machines. 
 > For fullstack deploying the machines will be :
   - manager1 - this machine running cloudera manager server
