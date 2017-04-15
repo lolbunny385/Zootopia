@@ -38,7 +38,7 @@
        path: /qjm
        owner: root
        group: root
-       mode: 0644
+       mode: 0777
      tags: dir
  
    - pause:
