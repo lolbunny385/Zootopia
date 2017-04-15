@@ -12,27 +12,28 @@ in this project we have two way for deploying our CDH:
 > For fullstack deploying the machines will be :
   - manager1 - this machine running cloudera manager server
   - manager2 - this machine running CMS
-  - gw1  - using as haproxy
-  - gw2 - using as a ha proxy.
+  - gw1  - used as haproxy
+  - gw2 - used as a haProxy.
   - master1 -this machine running Hadoop Application ,for example : HDFS,Hbase.
   - master2 - this machine ruunning Yarn and HDFS Secondary.
-  - edge - this machine running uses as a gateway to hadoop ecosystem.
+  - edge - this machine used as a gateway to hadoop ecosystem.
   - worker[1-3] - this machines responsible like its name to working .ruuning Datanode and impalad and nodemanager.
   
   > For minimal deploying the machines will be :
   - manager1 - this machine running cloudera manager server and CMS.
-  - gw1  - using as haproxy.
-  - master1 -this machine running Hadoop Application ,for example : HDFS,Hbase,Yarn.
-  - edge - this machine running uses as a gateway to hadoop ecosystem.
-  - worker[1-2] - this machines responsible like its name to working .ruuning Datanode and impalad and nodemanager.
+  - gw1  - Using as haproxy.
+  - master1 -This machine running hadoop application ,for example : HDFS,Hbase,Yarn.
+  - edge - this machine used as a gateway to hadoop ecosystem.
+  - worker[1-2] - this machines responsible like it's name to be a worker .ruuning Datanode and impalad and nodemanager.
  
 - `D`, after the machines are up ,ssh to gw1 using the command `$ vagrant ssh gw1`.Then,move to /home/vagrant/(minimal/fullstack)/playbook directory and press the command `$ansible-playbook site.yaml` - this command will deploy for you the CDH cluster.
+
 ### About the using playbooks:
-- site.yaml - this is the main playbook,he responsible for running all the other playbooks.
-- preinstall.yaml - This playbook responsible for configure optimization to CDH cluster and install cloudera-scm-agent and JDK on the cluster machines.
-- mariadb.yaml - this playbook responsible for configure maria galera db cluster.
-- ntp.yaml - this playbook responsible for configure ntp to machines.
-- CM.yaml - this playbook responsible for install cloudera-scms-server and provosiong Clouder manager wizard.
-- cluster_conf - this playbooks deploying the hadoop cluster ecosystem using cloudera rest api.
+- site.yaml - This is the main playbook,it is responsible for running all the other playbooks.
+- preinstall.yaml - This playbook is responsible for configure optimization to CDH cluster and install cloudera-scm-agent and JDK on the cluster machines.
+- mariadb.yaml - this playbook is responsible for configure maria galera db cluster.
+- ntp.yaml - this playbook is responsible for configure ntp to machines.
+- CM.yaml - this playbook is responsible for installing cloudera-scms-server and provosiong Clouder manager wizard.
+- cluster_conf - this playbook is deploying the hadoop cluster ecosystem using cloudera rest api.
 
 
