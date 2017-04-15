@@ -2,7 +2,7 @@
 ## This Project aims to deploy CDH cluster fully automated using ansible tools.
 in this project we have two way for deploying our CDH:
 - FullStack  - deploying CDH with HA and wide range of machines.
-- Minimal - deployinh CDH with core machines and without HA.
+- Minimal - deploying CDH with core machines and without HA .this deployment is used for testing.
 
 ### let's take a look on the deployment process:
 - `A` clone the repository to your local machine in path `/home/vagrant/(minimal/fullstack)/` using the command `git clone`.
