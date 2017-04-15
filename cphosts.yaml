@@ -1,8 +1,0 @@
----
-- hosts: cluster
-  become: yes
-  tasks:
-   - copy:
-      src: /home/vagrant/hosts/hosts
-      dest: /etc/hosts
-

@@ -1,4 +1,0 @@
----
-- hosts: db
-  roles:
-    - postgresql
