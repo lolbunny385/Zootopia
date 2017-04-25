@@ -1,7 +1,7 @@
 ---
       - name: master1
         box: "ubuntu/trusty64"
-        ram: "5000"
+        ram: "4000"
         cpu: "2" 
         ip: "192.168.0.100"
         provision: "worker.sh"
@@ -9,7 +9,7 @@
 
       - name: manager1
         box: "ubuntu/trusty64"
-        ram: "10000"
+        ram: "9000"
         cpu: "2" 
         ip: "192.168.0.102"
         provision: "worker.sh"
@@ -31,10 +31,11 @@
         provision: "worker.sh"
         folder: '/home/vagrant/minimal'
 
+
       - name: worker2
         box: "ubuntu/trusty64"
         ram: "1000"
-        cpu: "1" 
+        cpu: "1"
         ip: "192.168.0.106"
         provision: "worker.sh"
         folder: '/home/vagrant/minimal'

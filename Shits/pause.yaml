@@ -1,6 +1,0 @@
----
- - hosts: cluster
-   become: yes
-   tasks:
-   - pause: 
-       minutes: 3

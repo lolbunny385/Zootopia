@@ -14,12 +14,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
   servers.each do |servers|
     config.vm.define servers['name'] do |srv|
+# hostmanager plugin - we dont need him because we have a script that cp a /etc/hosts template file
       srv.hostmanager.enabled = true
       srv.hostmanager.manage_host = true
       srv.hostmanager.manage_guest = true
       srv.hostmanager.include_offline = true
       srv.hostmanager.alias = servers['name']
-      srv.ssh.insert_key = true
       srv.vm.box = servers['box']
       srv.vm.hostname = servers['name']
       srv.vm.network "private_network", ip: servers["ip"]
@@ -29,9 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       if servers['name'] == "manager1" 
         srv.vm.network :forwarded_port, guest: 3306, host: 8001
       end
-     if servers['name'] == "edge" 
+      if servers['name'] == "edge" 
         srv.vm.network :forwarded_port, guest: 3306, host: 8002
-     end
+      end
 
 
       if servers['name'] == "manager1"
@@ -64,11 +64,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       srv.vm.provider :virtualbox do |vb|
         vb.memory = servers['ram']
         vb.name = servers['name']
-        vb.gui = true
         vb.cpus = servers['cpu']
       end
+      srv.ssh.username = "vagrant"
+      srv.ssh.password = "vagrant"
       srv.vm.synced_folder servers['folder'], "/home/vagrant/minimal"
       srv.vm.provision :shell, :path  => servers['provision']
+#options for put the ansible scripts in Vagrantfile but it is not working because ssh problems
+ #     if servers['name'] == "gw1"
+  #      srv.vm.provision :ansible do |ansible|
+  #        ansible.sudo = true
+   #       ansible.sudo_user = "vagrant"
+    #      ansible.limit = 'all,localhost'
+     #     ansible.playbook = "/home/vagrant/minimal/playbook/site.yaml"
+#		ansible.inventory_path = "/home/vagrant/minimal/ansible_hosts"
+ #       end
+ #     end
     end
-  end 
+  end
 end

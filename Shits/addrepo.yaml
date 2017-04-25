@@ -1,7 +1,0 @@
----
-- hosts: cluster
-  tasks:
-  - name: add repo
-    apt: 
-      repo: deb https://archive.cloudera.com/cdh5/parcels/latest/ 
-      state: present
