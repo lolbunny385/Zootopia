@@ -1,7 +1,5 @@
 ---
 # tasks file for roles/pubkey
- - script: /home/vagrant/fullstack/scan.py
-   when: not manage==True
 
  - name: Remove entry from local known_hosts
    file:

@@ -6,6 +6,9 @@
  - name: "Preinstallation"
    include: preinstall.yaml
    tags: preinstall
+ 
+ - name: "Conf NTP Server"
+   include: ntp.yaml
     
  - name: "Galera Cluster"
    include: galera.yml
@@ -14,14 +17,12 @@
  - name: "Install CM Server"
    include: CM.yaml
    tags: CM
- 
- - name: "Conf NTP Server"
-   include: ntp.yaml
+
+ - name: "config hadoop cluster"
+   include: conf_cluster.yaml
+   tags: deploy
 
  - name: "HAProxy"
    include: haproxy.yml
    tags: haproxy
 
- - name: "config hadoop cluster"
-   include: conf_cluster.yaml
-   tags: deploy

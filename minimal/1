@@ -14,13 +14,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Iterate through entries in YAML file
   servers.each do |servers|
     config.vm.define servers['name'] do |srv|
-# host manager plugin
       srv.hostmanager.enabled = true
       srv.hostmanager.manage_host = true
       srv.hostmanager.manage_guest = true
       srv.hostmanager.include_offline = true
       srv.hostmanager.alias = servers['name']
- #     srv.ssh.insert_key = true
+      srv.ssh.insert_key = true
       srv.vm.box = servers['box']
       srv.vm.hostname = servers['name']
       srv.vm.network "private_network", ip: servers["ip"]
@@ -30,9 +29,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       if servers['name'] == "manager1" 
         srv.vm.network :forwarded_port, guest: 3306, host: 8001
       end
-     if servers['name'] == "edge" 
+      if servers['name'] == "edge" 
         srv.vm.network :forwarded_port, guest: 3306, host: 8002
-     end
+      end
 
 
       if servers['name'] == "manager1"
@@ -68,14 +67,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.gui = true
         vb.cpus = servers['cpu']
       end
-      srv.vm.synced_folder servers['folder'], "/home/vagrant/fullstack"
+      srv.vm.synced_folder servers['folder'], "/home/vagrant/minimal"
       srv.vm.provision :shell, :path  => servers['provision']
-# ansible provision optins - doesnot working during ssh problems
- #     if servers['name'] == "gw1"
-  #      srv.vm.provision :ansible do |ansible|
-   #       ansible.playbook = "/home/vagrant/fullstack/playbook/site.yaml"
-    #    end
-      end
+      if servers['name'] == "gw1"
+        srv.vm.provision "ansible" do |ansible|
+          ansible.playbook = "/home/vagrant/minimal/playbook/site.yaml"
+      end 
     end
   end 
 end

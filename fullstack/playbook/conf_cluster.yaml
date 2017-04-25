@@ -5,6 +5,8 @@
  - hosts: manager1
    become: yes
    tasks:
+   - pause:
+       prompt: "Make Sure retrial liceanse is enable"
    - name: "setup cms"
      uri:
        url: http://manager1:7180/api/v12/cm/service
