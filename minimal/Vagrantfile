@@ -1,13 +1,13 @@
 VAGRANTFILE_API_VERSION = "2"
 # Require YAML module
 require 'yaml'
-
+require 'etc'
 # Read YAML file with box details
 servers = YAML.load_file('hosts.yaml')
-disk1 = '/home/spiderman/workspace/firstDisk.vdi'
-disk2 = '/home/spiderman/workspace/secoundDisk.vdi'
-disk3 = '/home/spiderman/workspace/threeDisk.vdi'
-disk4 = '/home/spiderman/workspace/fourDisk.vdi'
+disk1 = "'Dir.home'/workspace/firstDisk.vdi"
+disk2 = "'Dir.home'/workspace/secoundDisk.vdi"
+disk3 = "'Dir.home'/workspace/threeDisk.vdi"
+disk4 = "'Dir.home'/workspace/fourDisk.vdi"
 # Create boxes
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
@@ -76,8 +76,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #        ansible.sudo = true
    #       ansible.sudo_user = "vagrant"
     #      ansible.limit = 'all,localhost'
-     #     ansible.playbook = "/home/vagrant/minimal/playbook/site.yaml"
-#		ansible.inventory_path = "/home/vagrant/minimal/ansible_hosts"
+     #     ansible.playbook = "/Dir.home/vagrant/minimal/playbook/site.yaml"
+#		ansible.inventory_path = "/Dir.home/vagrant/minimal/ansible_hosts"
  #       end
  #     end
     end
