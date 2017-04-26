@@ -293,7 +293,7 @@
   }, {
     "refName" : "master1",
     "cardinality" : 1,
-    "roleConfigGroupsRefNames" : [ "hdfs-BALANCER-BASE", "hdfs-FAILOVERCONTROLLER-BASE", "hdfs-NAMENODE-BASE", "yarn-RESOURCEMANAGER-BASE", "zookeeper-SERVER-BASE" ,"spark_on_yarn-GATEWAY-BASE"]
+    "roleConfigGroupsRefNames" : [ "hdfs-BALANCER-BASE",  "hdfs-NAMENODE-BASE", "yarn-RESOURCEMANAGER-BASE", "zookeeper-SERVER-BASE" ,"spark_on_yarn-GATEWAY-BASE"]
   }, {
     "refName" : "manager1",
     "cardinality" : 1,
@@ -305,7 +305,7 @@
   }, {
     "refName" : "master2",
     "cardinality" : 1,
-    "roleConfigGroupsRefNames" : [ "hdfs-FAILOVERCONTROLLER-BASE", "hdfs-SECONDARYNAMENODE-BASE", "impala-STATESTORE-BASE", "yarn-JOBHISTORY-BASE", "zookeeper-SERVER-BASE" ,"spark_on_yarn-GATEWAY-BASE"]
+    "roleConfigGroupsRefNames" : [  "hdfs-SECONDARYNAMENODE-BASE", "impala-STATESTORE-BASE", "yarn-JOBHISTORY-BASE", "zookeeper-SERVER-BASE" ,"spark_on_yarn-GATEWAY-BASE"]
   }, {
     "refName" : "worker",
     "cardinality" : 3,
