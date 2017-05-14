@@ -2,11 +2,10 @@
 - hosts: db
   become: yes
   vars:
-    primarynode: manager1
+    primarynode: manager
     db_services:
       - rman
       - hive
-      - sentry
       - nav
       - navms
       - oozie

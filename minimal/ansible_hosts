@@ -1,39 +1,29 @@
-[manage]
-gw1 manage=True
-
 [cluster:children]
-manager 
-edges 
+manager
 masters
 workers
-haproxy
 
 [masters]
-master1 manage=False
-
-[edges]
-edge Journal=True manage=False
+master manage=False
 
 [manager]
-manager1 Journal=True manage=False
+manager Journal=True manage=False
 
 [workers]
-worker1 manage=False
-worker2 manage=False
+worker1 manage=False Journal=True
+worker2 manage=False Journal=True
+worker3 manage=False Journal=True
 
 [db]
-manager1
-edge
-
-[journal]
-manager1
-edge 
-
-[haproxy]
-gw1 master=True
-
+worker1
+worker2
+worker3
 
 [all:vars]
-ansible_ssh_pass=vagrant
-ansible_sudo_pass=vagrant
-ansible_ssh_user=vagrant
+password=vagrant
+user=vagrant
+
+
+ansible_ssh_pass=password
+ansible_sudo_pass=password
+ansible_ssh_user=user

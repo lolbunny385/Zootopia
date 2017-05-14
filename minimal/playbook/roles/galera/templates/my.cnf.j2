@@ -52,7 +52,7 @@ wsrep_cluster_address="gcomm://{{ cluster_hosts }}"
 wsrep_sst_method=rsync
 
 # Galera Node Configuration
-wsrep_node_address={{ facter_ipaddress_eth1 }}
+wsrep_node_address={{ facter_ipaddress_eth0 }}
 wsrep_node_name={{ ansible_hostname }}
 #[mysqld_safe]
 #log-error=/var/log/mariadb/mariadb.log

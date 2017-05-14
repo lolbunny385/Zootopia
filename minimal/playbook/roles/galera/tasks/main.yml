@@ -1,15 +1,5 @@
 ---
 # tasks file for roles/galera
-- name: add MariaDB repo
-  apt_key:
-    keyserver: "hkp://keyserver.ubuntu.com:80"
-    id: "0xcbcb082a1bb943db"
-  tags: installation
-- apt_repository:   
-    repo: "deb [arch=amd64,i386,ppc64el] http://mirror.poliwangi.ac.id/mariadb/repo/10.0/ubuntu trusty main"
-    state: present
-  tags: installation
-
 - name: Install MariaDB
   environment:
     DEBIAN_FRONTEND: "noninteractive"

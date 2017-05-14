@@ -42,7 +42,7 @@
 
 - name: "Get local repository"
   apt_repository:
-    repo: deb http://192.168.1.14/debs/ amd64/
+    repo: "{{ repository }}"
     state: present
   tags:
   - repo
@@ -55,8 +55,6 @@
 - name: "Install JDK and CMA"
   apt:
     name:
-      - oracle-j2sdk1.7
-      - oracle-j2sdk1.6
       - oracle-java8-installer
       - cloudera-manager-agent
       - ntp

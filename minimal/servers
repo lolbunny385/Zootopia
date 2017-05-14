@@ -1,6 +1,5 @@
-manager1
-master1
-gw1
-edge
+manager
+master
 worker1
 worker2
+worker3
