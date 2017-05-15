@@ -18,11 +18,11 @@
    include: CM.yaml
    tags: CM
 
- - name: "config hadoop cluster"
-   include: conf_cluster.yaml
-   tags: deploy
+# - name: "config hadoop cluster"
+#   include: conf_cluster.yaml
+#   tags: deploy
 
- - name: "HAProxy"
-   include: haproxy.yml
-   tags: haproxy
+# - name: "HAProxy"
+#   include: haproxy.yml
+#   tags: haproxy
 
