@@ -1,0 +1,23 @@
+---
+#db services
+db_services:
+      - rman
+      - hive
+      - sentry
+      - nav
+      - navms
+      - oozie
+      - scm
+      - hue
+
+#sqoop user details
+sqoop_db: sqoop
+#repository Url
+repo_url: elephent
+
+
+#ssh details
+ansible_ssh_pass: vagrant
+ansible_sudo_pass: vagrant
+ansible_ssh_user: vagrant
+...

@@ -1,0 +1,19 @@
+---
+# tasks file for playbook/roles/ntp
+- name: "Install NTP"
+  apt:
+    name: ntp
+    state: latest 
+    update_cache: yes
+  
+- name: Update ntp.conf file
+  template: 
+    src: ntp.conf.j2
+    dest: /etc/ntp.conf
+    backup: yes
+
+- name: restart ntp service
+  service:
+    name: ntp
+    state: restarted
+  
