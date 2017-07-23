@@ -1,0 +1,14 @@
+---
+- hosts: cluster
+  become: yes
+  tasks:
+  - name: change line in file config
+    lineinfile:
+      name: /etc/cloudera-scm-agent/config.ini
+      state: present
+      regexp: "^server_host"
+      line: "server_host=manager1"
+  - name: restart Cloudera-scm-agent
+    service:
+      name: cloudera-scm-agent
+      state: restarted

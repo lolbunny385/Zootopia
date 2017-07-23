@@ -1,0 +1,65 @@
+---
+ - name: "add manager1 to cluser"
+   include: mng_add.yaml
+
+ - hosts: manager1
+   become: yes
+   tasks:
+   - pause:
+       prompt : "ensure retrial license are enable"
+   - name: "setup cms"
+     uri:
+       url: http://manager1:7180/api/v12/cm/service
+       method: PUT
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/home/vagrant/minimal/playbook/cmswithoutnav.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: setup
+   
+   - name: "start cms"
+     uri:
+       url: http://manager1:7180/api/v12/cm/service/commands/start
+       method: POST
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/home/vagrant/minimal/playbook/startwithoutnav.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: start cm
+   - pause: 
+       minutes: 5
+
+
+ - name: "add_hosts to cluster "
+   include: cl_add.yaml
+ 
+ - hosts: journal
+   become: yes
+   tasks:
+   - name: "create directory to JournalNodes "
+     file:
+       path: /qjm
+       owner: root
+       group: root
+       mode: 0777
+       state: directory
+     tags: dir
+   - pause:
+       minutes: 3
+
+  
+ - hosts: manager1 
+   become: yes
+   tasks:
+   - name: "Import Template Json"
+     uri:
+       url: http://manager1:7180/api/v12/cm/importClusterTemplate?addRepositories=true
+       method: POST
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/home/vagrant/minimal/playbook/minimal_template.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: template

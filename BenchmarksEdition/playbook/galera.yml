@@ -1,0 +1,17 @@
+---
+- hosts: db
+  become: yes
+  vars:
+    primarynode: manager1
+    db_services:
+      - rman
+      - hive
+      - sentry
+      - nav
+      - navms
+      - oozie
+      - scm
+      - hue
+    cluster_hosts: 192.168.0.102,192.168.0.104,192.168.0.103
+  roles:
+   - galera

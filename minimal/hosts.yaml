@@ -1,0 +1,49 @@
+---
+      - name: master1
+        box: "ubuntu/trusty64"
+        ram: "4000"
+        cpu: "2" 
+        ip: "192.168.0.100"
+        provision: "worker.sh"
+        folder: '/home/vagrant/minimal'
+
+      - name: manager1
+        box: "ubuntu/trusty64"
+        ram: "9000"
+        cpu: "2" 
+        ip: "192.168.0.102"
+        provision: "worker.sh"
+        folder: '/home/vagrant/minimal'
+      
+      - name: edge
+        box: "ubuntu/trusty64"
+        ram: "4000"
+        cpu: "1" 
+        ip: "192.168.0.104"
+        provision: "worker.sh"
+        folder: '/home/vagrant/minimal'
+
+      - name: worker1
+        box: "ubuntu/trusty64"
+        ram: "1000"
+        cpu: "1" 
+        ip: "192.168.0.105"
+        provision: "worker.sh"
+        folder: '/home/vagrant/minimal'
+
+
+      - name: worker2
+        box: "ubuntu/trusty64"
+        ram: "1000"
+        cpu: "1"
+        ip: "192.168.0.106"
+        provision: "worker.sh"
+        folder: '/home/vagrant/minimal'
+
+      - name: gw1
+        box: "ubuntu/trusty64"
+        ram: "1000"
+        cpu: "1"
+        ip: "192.168.0.108"
+        provision: "gw.sh"
+        folder: '/home/vagrant/minimal'

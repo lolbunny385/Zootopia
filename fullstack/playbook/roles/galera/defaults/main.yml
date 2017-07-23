@@ -1,0 +1,8 @@
+---
+# defaults file for roles/galera
+root_password: "Aa123456"
+cluster_user: replicator
+cluster_name: "Hadoop DB"
+cluster_password: "Aa123456"
+
+

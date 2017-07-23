@@ -1,0 +1,12 @@
+{ 
+"name": "start",
+"active":true,
+"serviceRef": {
+"serviceName":"mgmt"},
+"roleRef": {
+"roleName": 
+  ["ALERTPUBLISHER","HOSTMONITOR","HOSTMONITOR","REPORTSMANAGER","EVENTSERVER"]
+}
+}
+
+
