@@ -1,0 +1,32 @@
+---
+- name: install influxdb
+  apt:
+    name: "{{ item }}"
+    state: installed
+  when: ansible_default_ipv4.address == influxdb_server
+  with_items:
+  - influxdb
+  - python-pip
+
+- shell: pip install influxdb
+  when: ansible_default_ipv4.address == influxdb_server
+
+- name: change influxdb.conf
+  template:
+    src: influxdb.conf
+    dest: /etc/influxdb/influxdb.conf
+  when: ansible_default_ipv4.address == influxdb_server
+
+- name: start influxdb
+  service: 
+    name: influxdb
+    state: started
+  when: ansible_default_ipv4.address == influxdb_server
+
+- name: Create database
+  influxdb_database:
+      hostname: "{{ influxdb_server }}"
+      database_name: CDH
+      state: present
+  when: ansible_default_ipv4.address == influxdb_server
+

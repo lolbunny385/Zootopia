@@ -1,0 +1,59 @@
+---
+- name: add grafana repository 
+  apt_key:
+    url: https://packagecloud.io/gpg.key
+    state: present
+
+- name: add grafana repository
+  apt_repository:
+    repo: deb https://packagecloud.io/grafana/testing/debian/ jessie main
+    state: present
+
+- name: install grafana
+  apt:
+    name: grafana
+    state: installed
+  when: ansible_default_ipv4.address == grafana_server
+
+- name: Start Grafana Service
+  service: 
+    name: grafana-server
+    state: started
+  when: ansible_default_ipv4.address == grafana_server
+
+- name: genrate json for hadoop dashboard
+  local_action: template src=datasource.json.j2 dest=~/datasource.json
+  when: ansible_default_ipv4.address == grafana_server
+  tags: datasource
+
+- name: Add Database to Grafana
+  uri:
+    url: "http://{{ grafana_server }}:3000/api/datasources"
+    method: POST
+    user: admin
+    password: admin
+    body: "{{ lookup('file','~/datasource.json') }}"
+    force_basic_auth: yes
+    body_format: json
+  when: ansible_default_ipv4.address == grafana_server
+  tags: datasource
+
+- name: Genrate Json for Hadoop Dashboard
+  local_action: template src=dashboard.json.j2 dest=~/dashboard.json
+  when: ansible_default_ipv4.address == grafana_server
+
+- name: Import Dashboard Template to Grafana
+  uri:
+    url: "http://{{ grafana_server }}:3000/api/dashboards/db"
+    method: POST
+    user: admin
+    password: admin
+    body: "{{ lookup('file','~/dashboard.json') }}"
+    body_format: json
+    force_basic_auth: yes
+  when: ansible_default_ipv4.address == grafana_server
+
+
+
+   
+  
