@@ -1,0 +1,12 @@
+---
+- name: install and config influxdb
+  include: influxdb.yml
+  tags: influxdb
+
+- name: install and config grafana dashboard
+  include: grafana.yml
+  tags: grafana
+
+- name: install and config telegraf collector
+  include: telegraf.yml
+  tags: telegraf
