@@ -1,5 +1,5 @@
 # Hadoop-Ansible
-## This Automation will deploy Hadoop application for you using Ansible CM
+## This Automation will deploy Hadoop application using Ansible CM
 
 #### Deployment process:
 - Install Ansible with the command: ` sudo apt-get install ansible` , Ensure Ansible version >= 2.1
