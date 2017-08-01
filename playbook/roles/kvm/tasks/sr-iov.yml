@@ -1,0 +1,16 @@
+---
+- name: activate SR-IOV kernel module, create 8 VFs
+  modprobe:
+    name: ixgbe
+    state: present
+    params: 'max_vfs=7'
+
+- name: Make settings persistent
+  # Not 100% sure this will works, may need to configure as boot option
+  copy:
+    content: options ixgbe max_vfs=7
+    dest: /etc/modprobe.d/ixgbe.conf
+
+- name: Attach VFs
+  script: device-details.sh {{ item }}
+  with_sequence: start=0 end={{ num_vms - 1 }}

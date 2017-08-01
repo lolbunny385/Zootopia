@@ -1,0 +1,18 @@
+[cluster:children]
+manager
+masters
+workers
+
+[masters]
+master hostname=master
+
+[manager]
+manager hostname=manager
+
+[workers]
+worker2 hostname=worker2
+worker1 hostname=worker1
+worker3 hostname=worker3
+
+[db]
+manager

@@ -1,5 +1,0 @@
-#! /bin/bash
-z =`sudo lshw -C disk  | grep -i '/dev'`
-print $z
-k =`echo $z | tail -1`
-echo $k

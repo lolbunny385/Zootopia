@@ -1,0 +1,96 @@
+---
+ - hosts: manager
+   become: yes
+   tasks:
+   - name: change line in file config
+     lineinfile:
+       name: /etc/cloudera-scm-agent/config.ini
+       state: present
+       regexp: "^server_host"
+       line: "server_host={{ CM }}"
+
+   - name: restart Cloudera-scm-agent
+     service:
+       name: cloudera-scm-agent
+       state: restarted
+
+   - pause:
+       minutes: 2
+
+   - name: retrial liceanse
+     uri:
+       url: "http://{{ CM }}:7180/api/v15/cm/trial/begin"
+       method: POST
+       user: admin
+       password: admin
+       force_basic_auth: yes
+     ignore_errors: yes
+
+   - name: genarate json for setup CMS
+     template:
+       src: "/etc/ansible/playbook/CMS.json.j2"
+       dest: '/etc/ansible/playbook/cmswithoutnav.json'
+
+   - pause:
+       minutes: 2
+
+   - name: "setup cms"
+     uri:
+       url: "http://{{ CM }}:7180/api/v12/cm/service"
+       method: PUT
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/etc/ansible/playbook/cmswithoutnav.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: setup
+
+   - name: "start cms"
+     uri:
+       url: "http://{{ CM }}:7180/api/v12/cm/service/commands/start"
+       method: POST
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/etc/ansible/playbook/startwithoutnav.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: start cm
+   - pause: 
+       minutes: 5
+
+ 
+ - hosts: cluster
+   become: yes
+   tasks:
+   - name: change line in file config
+     lineinfile:
+       name: /etc/cloudera-scm-agent/config.ini
+       state: present
+       regexp: "^server_host"
+       line: "server_host={{ CM }}"
+   - name: restart Cloudera-manager-agent
+     service:
+       name: cloudera-scm-agent
+       state: restarted
+
+  
+ - hosts: manager
+   become: yes
+   tasks:
+   - name: "genarte json tempalte for cluser"
+     template:
+       src: "/etc/ansible/playbook/minimal.json.j2"
+       dest: "/etc/ansible/playbook/minimal.json"
+     tags: template
+ 
+   - name: "Import Template Json"
+     uri:
+       url: "http://{{ CM }}:7180/api/v12/cm/importClusterTemplate?addRepositories=true"
+       method: POST
+       user: admin
+       password: admin
+       body: "{{ lookup('file','/etc/ansible/playbook/minimal.json') }}"
+       force_basic_auth: yes
+       body_format: json
+     tags: template
+

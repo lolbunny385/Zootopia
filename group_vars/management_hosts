@@ -1,0 +1,5 @@
+---
+num_vms: 2
+cpu: 8
+mem: 64
+storage_type: file

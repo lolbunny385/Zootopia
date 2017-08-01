@@ -1,0 +1,72 @@
+---
+
+# VM properties
+disks:
+  - /dev/vdb
+num_vms: 2
+# what disks to use. Options are: 
+# direct - map local disks directly
+# object - use volume images. May need to be created beforehand
+# rbd - Ceph block devices
+storage_type: "rbd"
+#rbd destination
+image: new-vm
+cpu: "{{ (24 / num_vms|int())|int() }}"
+mem: "{{ (256 / num_vms|int())|int() }}"
+ceph_monitor:
+
+
+## Ansible Configuration
+#ssh properties
+
+ansible_ssh_pass: ""
+ansible_sudo_pass: ""
+ansible_ssh_user: ""
+
+## Hadoop Configuration
+#user and passowrd
+
+cma_password: ""
+parcel_repo: ''
+
+#DB Properties
+#galera_b.domain
+db_b.domain:
+ - rman
+ - hive
+ - nav
+ - navms
+ - oozie
+ - scm
+ - hue
+
+#DB Hosts
+galera_hosts: 
+
+#Primary node for galera cluster
+primarynode: ""
+
+#galera cluster name
+cluster_name: "CDH"
+cluster_password: ""
+
+#Workers Nodes
+workers:
+ - "worker1"
+ - "worker2"
+ - "worker3"
+
+##Cluster nodes names or ips - pay attension to case sensetive 
+master:  "master"
+CM: "manager."
+manager: "manager"
+# Check why we need this onw
+workers_num: "3"
+
+## Object Store
+#Do you want to use CEPH as an object storage? type yes/no
+Ceph: "no"
+#CEPH Object Store Configuration
+endpoint: ""
+access_key: ""
+secret_key: ""

@@ -1,0 +1,14 @@
+---
+- hosts: db
+  become: yes
+  vars:
+    db_b.domain:
+      - rman
+      - hive
+      - nav
+      - navms
+      - oozie
+      - scm
+      - hue
+  roles:
+   - mariadb

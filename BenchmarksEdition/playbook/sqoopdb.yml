@@ -1,7 +1,0 @@
----
-- hosts: edge
-  vars:
-    - db_services:
-      - sqoop
-  roles:
-    - postgress

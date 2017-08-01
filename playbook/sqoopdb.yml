@@ -1,0 +1,7 @@
+---
+- hosts: edge
+  vars:
+    - db_b.domain:
+      - sqoop
+  roles:
+    - postgress

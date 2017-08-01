@@ -1,0 +1,7 @@
+---
+- hosts:
+    - worker_hosts
+    - management_hosts
+  roles:
+    - kvm
+  become: yes

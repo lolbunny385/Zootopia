@@ -1,0 +1,4 @@
+---
+- hosts: manager
+  roles: 
+  - CM_Server

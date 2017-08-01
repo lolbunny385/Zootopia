@@ -1,0 +1,24 @@
+---
+# tasks file for roles/haproxy
+- name: install haproxy 
+  apt:
+    name:
+      - haproxy
+    allow_unauthenticated: yes
+
+- name: Allow Floating IP
+  sysctl: name=net.ipv4.ip_nonlocal_bind value=1
+
+- name: Copy HAProxy Configurations
+  copy:
+    src: haproxy.cfg
+    dest: /etc/haproxy/haproxy.cfg
+
+
+- name: Start b.domain
+  service:
+    name: '{{ item }}'
+    state: restarted
+    enabled: yes
+  with_items:
+    - haproxy

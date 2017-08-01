@@ -1,0 +1,6 @@
+---
+- name: copy domain xml
+  template:
+    src: domain.xml.j2
+    dest: /tmp/domain.xml
+    validate: virsh define %s --validate

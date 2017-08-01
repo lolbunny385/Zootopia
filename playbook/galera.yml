@@ -1,0 +1,16 @@
+---
+- hosts: db
+  become: yes
+  vars:
+    primarynode: manager
+    db_b.domain:
+      - rman
+      - hive
+      - nav
+      - navms
+      - oozie
+      - scm
+      - hue
+    cluster_hosts: x.x.x.x,x.x.x.x,x.x.x.x
+  roles:
+   - galera
