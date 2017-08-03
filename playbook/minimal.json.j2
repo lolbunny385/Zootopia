@@ -1,0 +1,317 @@
+{
+  "cdhVersion" : "5.10.0",
+  "displayName" : "{{ storage_type }}-{{ num_vms }}",
+  "cmVersion" : "5.10.0",
+  "repositories" : [ {{ parcel_repo }} ],
+  "products" : [ {
+    "version" : "2.1.0-x.x.x.x.p0.115",
+    "product" : "KAFKA"
+  }, {
+    "version" : "5.10.0-1.cdh5.10.0.p0.41",
+    "product" : "CDH"
+  } ],
+  "b.domain" : [ {
+    "refName" : "hive",
+    "serviceType" : "HIVE",
+    "serviceConfigs" : [ {
+      "name" : "mapreduce_yarn_service",
+      "ref" : "yarn"
+    }, {
+      "name" : "hive_metastore_database_name",
+      "variable" : "hive-hive_metastore_database_name"
+    }, {
+      "name" : "spark_on_yarn_service",
+      "ref" : "spark_on_yarn"
+    }, {
+      "name" : "hive_metastore_database_host",
+      "variable" : "hive-hive_metastore_database_host"
+    }, {
+      "name" : "zookeeper_service",
+      "ref" : "zookeeper"
+    }, {
+      "name" : "hive_metastore_database_password",
+      "variable" : "hive-hive_metastore_database_password"
+    } ],
+    "roleConfigGroups" : [ {
+      "refName" : "hive-HIVEMETASTORE-BASE",
+      "roleType" : "HIVEMETASTORE",
+      "base" : true
+    }, {
+      "refName" : "hive-HIVESERVER2-BASE",
+      "roleType" : "HIVESERVER2",
+      "base" : true
+    }, {
+      "refName" : "hive-WEBHCAT-BASE",
+      "roleType" : "WEBHCAT",
+      "base" : true
+    }, {
+      "refName" : "hive-GATEWAY-BASE",
+      "roleType" : "GATEWAY",
+      "base" : true
+    } ]
+  }, {
+    "refName" : "zookeeper",
+    "serviceType" : "ZOOKEEPER",
+    "roleConfigGroups" : [ {
+      "refName" : "zookeeper-SERVER-BASE",
+      "roleType" : "SERVER",
+      "base" : true
+    } ]
+  }, {
+    "refName" : "oozie",
+    "serviceType" : "OOZIE",
+    "serviceConfigs" : [ {
+      "name" : "spark_on_yarn_service",
+      "ref" : "spark_on_yarn"
+    }, {
+      "name" : "hive_service",
+      "ref" : "hive"
+    }, {
+      "name" : "mapreduce_yarn_service",
+      "ref" : "yarn"
+    }, {
+      "name" : "zookeeper_service",
+      "ref" : "zookeeper"
+    } ],
+    "roleConfigGroups" : [ {
+      "refName" : "oozie-OOZIE_SERVER-BASE",
+      "roleType" : "OOZIE_SERVER",
+      "configs" : [ {
+        "name" : "oozie_database_password",
+        "variable" : "oozie-OOZIE_SERVER-BASE-oozie_database_password"
+      }, {
+        "name" : "oozie_database_type",
+        "variable" : "oozie-OOZIE_SERVER-BASE-oozie_database_type"
+      }, {
+        "name" : "oozie_database_user",
+        "variable" : "oozie-OOZIE_SERVER-BASE-oozie_database_user"
+      }, {
+        "name" : "oozie_database_host",
+        "variable" : "oozie-OOZIE_SERVER-BASE-oozie_database_host"
+      } ],
+      "base" : true
+    } ]
+  }, {
+    "refName" : "impala",
+    "serviceType" : "IMPALA",
+    "serviceConfigs" : [ {
+      "name" : "hive_service",
+      "ref" : "hive"
+    }, {
+      "name" : "hdfs_service",
+      "ref" : "hdfs"
+    } ],
+    "roleConfigGroups" : [ {
+      "refName" : "impala-IMPALAD-BASE",
+      "roleType" : "IMPALAD",
+      "configs" : [ {
+        "name" : "scratch_dirs",
+        "variable" : "impala-IMPALAD-BASE-scratch_dirs"
+      } ],
+      "base" : true
+    }, {
+      "refName" : "impala-STATESTORE-BASE",
+      "roleType" : "STATESTORE",
+      "base" : true
+    }, {
+      "refName" : "impala-CATALOGSERVER-BASE",
+      "roleType" : "CATALOGSERVER",
+      "base" : true
+    }, {
+      "refName" : "impala-LLAMA-BASE",
+      "roleType" : "LLAMA",
+      "base" : true
+    } ]
+  }, {
+    "refName" : "yarn",
+    "serviceType" : "YARN",
+    "serviceConfigs" : [ {
+      "name" : "hdfs_service",
+      "ref" : "hdfs"
+    }, {
+      "name" : "cm_yarn_container_usage_job_user",
+      "value" : "ubuntu"
+    }, {
+      "name" : "cm_yarn_enable_container_usage_aggregation",
+      "value" : "true"
+    }, {
+      "name" : "zookeeper_service",
+      "ref" : "zookeeper"
+    } ],
+    "roleConfigGroups" : [ {
+      "refName" : "yarn-RESOURCEMANAGER-BASE",
+      "roleType" : "RESOURCEMANAGER",
+      "base" : true
+    }, {
+      "refName" : "yarn-JOBHISTORY-BASE",
+      "roleType" : "JOBHISTORY",
+      "base" : true
+    }, {
+      "refName" : "yarn-GATEWAY-BASE",
+      "roleType" : "GATEWAY",
+      "base" : true
+    }, {
+      "refName" : "yarn-NODEMANAGER-BASE",
+      "roleType" : "NODEMANAGER",
+      "configs" : [ {
+        "name" : "yarn_nodemanager_local_dirs",
+        "variable" : "yarn-NODEMANAGER-BASE-yarn_nodemanager_local_dirs"
+      }, {
+        "name" : "yarn_nodemanager_log_dirs",
+        "variable" : "yarn-NODEMANAGER-BASE-yarn_nodemanager_log_dirs"
+      } ],
+      "base" : true
+    } ]
+  }, {
+    "refName" : "spark_on_yarn",
+    "serviceType" : "SPARK_ON_YARN",
+    "serviceConfigs" : [ {
+      "name" : "yarn_service",
+      "ref" : "yarn"
+    } ],
+    "roleConfigGroups" : [ {
+      "refName" : "spark_on_yarn-SPARK_YARN_HISTORY_SERVER-BASE",
+      "roleType" : "SPARK_YARN_HISTORY_SERVER",
+      "base" : true
+    }, {
+      "refName" : "spark_on_yarn-GATEWAY-BASE",
+      "roleType" : "GATEWAY",
+      "base" : true
+    } ]
+  }, {
+    "refName" : "hdfs",
+    "serviceType" : "HDFS",
+    "serviceConfigs" : [ {
+      "name" : "zookeeper_service",
+      "ref" : "zookeeper"
+    }{% if  Ceph == "yes" %}, {
+      "name" : "core_site_safety_valve",
+      "value" : "<property><name>fs.s3a.endpoint</name><value>{{ endpoint }}</value></property><property><name>fs.s3a.secret.key</name><value>{{ secret_key }}</value></property><property><name>fs.s3a.access.key</name><value>{{ access_key }}</value></property><property><name>fs.s3a.impl</name><value>org.apache.hadoop.fs.s3a.S3AFileSystem</value></property>"
+    }
+   {% endif %}],
+    "roleConfigGroups" : [ {
+      "refName" : "hdfs-DATANODE-BASE",
+      "roleType" : "DATANODE",
+      "configs" : [ {
+        "name" : "dfs_datanode_sync_behind_writes",
+        "value" : "true"
+      } ],
+      "base" : true
+    }, {
+      "refName" : "hdfs-NAMENODE-BASE",
+      "roleType" : "NAMENODE",
+      "configs" : [ {
+        "name" : "dfs_name_dir_list",
+        "variable" : "hdfs-NAMENODE-BASE-dfs_name_dir_list"
+      } ],
+      "base" : true
+    }, {
+      "refName" : "hdfs-FAILOVERCONTROLLER-BASE",
+      "roleType" : "FAILOVERCONTROLLER",
+      "base" : true
+    }, {
+      "refName" : "hdfs-BALANCER-BASE",
+      "roleType" : "BALANCER",
+      "base" : true
+    }, {
+      "refName" : "hdfs-GATEWAY-BASE",
+      "roleType" : "GATEWAY",
+      "configs" : [ {
+        "name" : "dfs_client_read_shortcircuit",
+        "value" : "true"
+      } ],
+      "base" : true
+    }, {
+      "refName" : "hdfs-SECONDARYNAMENODE-BASE",
+      "roleType" : "SECONDARYNAMENODE",
+      "configs" : [ {
+        "name" : "fs_checkpoint_dir_list",
+        "variable" : "hdfs-SECONDARYNAMENODE-BASE-fs_checkpoint_dir_list"
+      } ],
+      "base" : true
+    }, {
+      "refName" : "hdfs-JOURNALNODE-BASE",
+      "roleType" : "JOURNALNODE",
+      "base" : true
+    }, {
+      "refName" : "hdfs-HTTPFS-BASE",
+      "roleType" : "HTTPFS",
+      "base" : true
+    }, {
+      "refName" : "hdfs-NFSGATEWAY-BASE",
+      "roleType" : "NFSGATEWAY",
+      "base" : true
+    } ]
+  } ],
+  "hostTemplates" : [ {
+    "refName" : "manager",
+    "cardinality" : 1,
+    "roleConfigGroupsRefNames" : [ "hdfs-SECONDARYNAMENODE-BASE", "hive-GATEWAY-BASE", "hive-HIVEMETASTORE-BASE", "hive-HIVESERVER2-BASE", "oozie-OOZIE_SERVER-BASE", "spark_on_yarn-GATEWAY-BASE" ]
+  }, {
+    "refName" : "worker",
+    "cardinality" : {{ workers_num }},
+    "roleConfigGroupsRefNames" : [ "hdfs-DATANODE-BASE", "hive-GATEWAY-BASE", "impala-IMPALAD-BASE", "spark_on_yarn-GATEWAY-BASE", "yarn-NODEMANAGER-BASE" ]
+  }, {
+    "refName" : "master",
+    "cardinality" : 1,
+    "roleConfigGroupsRefNames" : [ "hdfs-NAMENODE-BASE", "hive-GATEWAY-BASE", "impala-CATALOGSERVER-BASE", "impala-STATESTORE-BASE", "spark_on_yarn-GATEWAY-BASE", "spark_on_yarn-SPARK_YARN_HISTORY_SERVER-BASE", "yarn-JOBHISTORY-BASE", "yarn-RESOURCEMANAGER-BASE", "zookeeper-SERVER-BASE" ]
+  } ],
+  "instantiator" : {
+    "clusterName" : "{{ storage_type }}-{{ num_vms }}",
+    "hosts" : [ {
+      "hostName" : "{{ master }}",
+      "hostTemplateRefName" : "master"
+    }, {
+      "hostName" : "{{ manager }}",
+      "hostTemplateRefName" : "manager"
+    },{% for worker in  workers %} {% if loop.last %}
+     {
+      "hostNameRange" : "{{ worker }}",
+      "hostTemplateRefName" : "worker"
+    } ],
+   {% else %}
+     {
+     "hostNameRange" : "{{ worker }}",
+      "hostTemplateRefName" : "worker"
+    },
+   {% endif %}
+ {% endfor %}
+    "variables" : [ {
+      "name" : "hdfs-NAMENODE-BASE-dfs_name_dir_list",
+      "value" : "/dfs/nn"
+    }, {
+      "name" : "hdfs-SECONDARYNAMENODE-BASE-fs_checkpoint_dir_list",
+      "value" : "/dfs/snn"
+    }, {
+      "name" : "hive-hive_metastore_database_host",
+      "value" : "{{ manager }}"
+    }, {
+      "name" : "hive-hive_metastore_database_name",
+      "value" : "hive"
+    }, {
+      "name" : "hive-hive_metastore_database_password",
+      "value" : "hive_password"
+    }, {
+      "name" : "impala-IMPALAD-BASE-scratch_dirs",
+      "value" : "/impala/impalad"
+    }, {
+      "name" : "oozie-OOZIE_SERVER-BASE-oozie_database_host",
+      "value" : "{{ manager }}"
+    }, {
+      "name" : "oozie-OOZIE_SERVER-BASE-oozie_database_password",
+      "value" : "oozie_password"
+    }, {
+      "name" : "oozie-OOZIE_SERVER-BASE-oozie_database_type",
+      "value" : "mysql"
+    }, {
+      "name" : "oozie-OOZIE_SERVER-BASE-oozie_database_user",
+      "value" : "oozie"
+    }, {
+      "name" : "yarn-NODEMANAGER-BASE-yarn_nodemanager_local_dirs",
+      "value" : "/yarn/nm"
+    }, {
+      "name" : "yarn-NODEMANAGER-BASE-yarn_nodemanager_log_dirs",
+      "value" : "/yarn/container-logs"
+    } ]
+  }
+}

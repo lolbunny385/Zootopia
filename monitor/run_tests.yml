@@ -1,0 +1,9 @@
+---
+- hosts: manager
+  become: yes
+  roles:
+    - run_tests
+  environment:
+    TOPOLOGY: {{ topology }}
+    CLUSTER: {{ cluster }}
+    ITERATION: {{ iteration }}

@@ -1,0 +1,48 @@
+---
+- incule: tuned.yml
+
+- name: install kvm
+  apt:
+    name:
+      - qemu-kvm
+      - libvirt-bin
+      - ubuntu-vm-builder
+      - bridge-utils
+      - virt-manager
+      - qemu-system
+    state: installed
+    allow_unauthenticated: yes
+  tags: installs
+ 
+#- name: enable vhost_net
+#  modprobe:
+#    name: vhost_net
+#    state: present
+
+- name: automatic node balancing
+  shell: echo 1 > /proc/sys/kernel/numa_balancing
+
+- name: enable ksm
+  shell: echo 1 > /sys/kernel/mm/ksm/run
+
+- name: Disable merging across nodes
+  shell: echo 1 > /sys/kernel/mm/ksm/merge_across_nodes
+  
+- name: copy domain xml
+  template:
+    src: domain.xml.j2
+    dest: /tmp/domain{{ item }}.xml
+    validate: virsh define %s --validate 
+  with_sequence: start=0 end={{ num_vms - 1 }}
+  register: copied_xml
+  
+#- name: define vms
+#  shell: virsh define /tmp/domain{{ item }}.xml
+#  with_sequence: start=0 end={{ num_vms - 1 }}
+#  when: copied_xml|changed
+  
+#- include: sr-iov.yml
+
+- name: start vms
+  shell: virsh start vm{{ item }}
+  with_sequence: start=0 end={{ num_vms - 1 }}

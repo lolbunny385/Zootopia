@@ -1,0 +1,78 @@
+<domain type='kvm'>
+<!--dynamic name-->
+  <name>{{ ansible_hostname }}{{ item }}</name>
+  <!--UUID should be generated-->
+  <memory unit='GiB'>{{ mem }}</memory>
+  <currentMemory unit='GiB'>{{ mem }}</currentMemory>
+  <vcpu cpuset='{{ item|int() * cpu|int() }}-{{ (item|int() + 1) * cpu|int() - 1 }}'>{{ cpu }}</vcpu>
+    <cputune>
+{% for n in range(cpu|int()) %}
+      <vcpupin vcpu='{{ n }}' cpuset='{{ item|int() * cpu|int() + n }}'/>
+{% endfor %}
+    </cputune>
+  <numatune>
+    <memory mode='preferred' placement='auto'/>
+  </numatune>
+  <os>
+    <type arch='x86_64' machine='pc-i440fx-trusty'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <cpu mode='host-passthrough'/>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/kvm-spice</emulator>
+{% if storage_type=='rbd' %}
+    <disk type='network' device='disk' cache='writeback'>
+      <source protocol='rbd' name='rbd/{{ image }}'>
+        <host name='{{ ceph_monitor }}' port='8080'/>
+      <target dev='vda' bus'virtio'/>
+    </disk>
+{% elif storage_type=='direct' %}
+{% for disk in disks[item|int() * vm_disks|int() : (item|int() + 1) * vm_disks|int()] %}
+    <disk type='block' device='disk' cache='writeback'>
+      <driver name='qemu' type='raw'/>
+      <source dev='{{ disk }}1'/>
+      <target dev='sd{{ disk[disk|length() - 1] }}' bus='virtio'/>
+    </disk>
+{% endfor %}
+{% elif storage_type=='file' %}
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='raw'/>
+      <source file='/var/lib/libvirt/images/{{ item }}'/>
+      <target dev='sda' bus='virtio'/>
+    </disk>
+{% endif %}
+    <disk type='block' device='cdrom'>
+      <driver name='qemu' type='raw'/>
+      <target dev='hdc' bus='ide'/>
+      <readonly/>
+    </disk>
+    <controller type='pci' index='0' model='pci-root'/>
+    <controller type='ide' index='0'>
+    </controller>
+    <controller type='usb' index='0'>
+    </controller>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+    <input type='mouse' bus='ps2'/>
+    <input type='keyboard' bus='ps2'/>
+    <graphics type='vnc' port='-1' autoport='yes'/>
+    <video>
+      <model type='cirrus' vram='16384' heads='1'/>
+    </video>
+    <memballoon model='virtio'>
+    </memballoon>
+  </devices>
+</domain>

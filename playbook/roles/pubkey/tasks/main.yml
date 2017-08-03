@@ -1,0 +1,16 @@
+---
+# tasks file for roles/pubkey
+
+ - name: Remove entry from local known_hosts
+   file:
+     dest: ~/.ssh/known_hosts
+     state: absent
+ #  when: not manage==True
+
+
+ - name: Set authorized key took from file
+   authorized_key:
+     user: "{{ ansible_ssh_user }}"
+     state: present
+     key: "{{ lookup('file', '/home/{{ ansible_ssh_user }}/.ssh/id_rsa.pub') }}"
+ #  when: not manage==True

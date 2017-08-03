@@ -1,0 +1,41 @@
+- name: "Install Dependencies"
+  apt:
+    name:
+      - rpm
+      - python-decorator
+      - python-dbus
+      - python-gobject
+      - python-pyudev
+      - python-configobj
+      - make
+      - cowsay
+    state: installed
+    allow_unauthenticated: yes
+  tags: installs
+
+- name: Copy Tuned
+  synchronize:
+    src: /opt/tuned-ubuntu
+    dest: /opt
+    recursive: yes
+    archive: no
+
+- name: Make
+  make:
+   chdir: /opt/tuned-ubuntu
+   target: install
+  args:
+    creates: /etc/init.d/tuned
+  register: tuned_installed
+
+- name: Reboot
+  shell: reboot
+#  when: tuned_installed|changed
+
+
+- name: Wait for server to come up
+  local_action: wait_for host={{ ansible_ssh_host }} state=started
+
+- name: Tune
+  shell: tuned-adm profile virtual-guest
+  

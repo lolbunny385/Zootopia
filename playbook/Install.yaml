@@ -1,0 +1,29 @@
+---
+ - name: "Publish Pub key"
+   include: pubkey.yaml
+   tags: pubkey
+
+ - name: "Preinstallation"
+   include: preinstall.yaml
+   tags: preinstall
+ 
+ - name: "Conf NTP Server"
+   include: ntp.yaml
+   tags: ntp
+    
+ - name: "Install and prepare MariaDB"
+   include: mariadb.yml
+   tags: db
+    
+ - name: "Install CM Server"
+   include: CM.yaml
+   tags: CM
+
+ - name: "config hadoop cluster"
+   include: conf_cluster.yml
+   tags: deploy
+
+# - name: "HAProxy"
+#   include: haproxy.yml
+#   tags: haproxy
+

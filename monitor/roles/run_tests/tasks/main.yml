@@ -1,0 +1,49 @@
+---
+# tasks file for run_tests
+- name: copy Hibench
+  synchronize:
+    src: /var/HiBench
+    dest: /var
+    recursive: yes
+    archive: no
+  tag: Hibench
+
+- name: configure Hibench
+  lineinfile:
+    name: /var/HiBench/conf/hadoop.conf
+    regexp: "^hibench.hdfs.master"
+    line: "hibench.hdfs.master  {{ hibench_dir }}"
+  tag: Hibench
+  
+- lineinfile:
+    name: /var/HiBench/conf/hibench.conf
+    regexp: "^hibench.scale.profile"
+    line: "hibench.scale.profile  {{ hibench_scale }}"
+  tag: Hibench
+
+- name: prepare data
+    shell: "/var/HiBench/bin/prepare_all.sh > hibench-{{ iteration }}-prepare-results.txt"
+  environment:
+    TEST: hibench_prepare
+  tag: Hibench
+
+- name: run Hibench tests
+    shell: "/var/HiBench/bin/prepare_all.sh > {{ test }}-{{ iteration }}-results.txt"
+  environment:
+    TEST: hibench_run
+  tag: Hibench
+
+- name: copy tpc-ds
+  synchronize:
+    src: /var/uber-tpcds-kit
+    dest: /var
+    recursive: yes
+    archive: no
+
+
+- name: Prepare data and load it into impala
+  shell: "hadoop jar target/tpcds-gen-1.0-SNAPSHOT.jar -d /tmp/tpcds-text -s 10000 -p 100
+impala-shell -f impala/impala-external.sql
+impala-shell -f impala/impala-parquet.sql
+impala-shell -f impala/impala-insert.sql"
+
