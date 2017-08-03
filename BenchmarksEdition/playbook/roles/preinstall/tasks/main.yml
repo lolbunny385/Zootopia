@@ -40,30 +40,14 @@
     shell: "/bin/bash"
   tags: cma
 
-<<<<<<< HEAD
 - name: "Get local repository"
   apt_repository:
-    repo: "{{ repository }}"
+    repo: deb http://"{{ repo_url }}"/debs/ amd64/
     state: present
   tags:
   - repo
   - agent 
   - jdk
-=======
-#- name: "Get local repository"
-#  apt_repository:
-#    repo: deb http://192.168.1.10/ubuntu
-#    state: present
-#    update_cache: yes
-#  tags:
-#  - repo
-#  - agent 
-#  - jdk
-- name: "install repo"
-  shell: "sudo wget 'https://archive.cloudera.com/cdh5/ubuntu/trusty/amd64/cdh/cloudera.list' \ -O /etc/apt/sources.list.d/cloudera.list"
-- shell: "sudo apt update"
-
->>>>>>> 238adbebc8378da3043fad2daaeb176b1d3b310e
 
 - name: "Auto accept JDK"
   shell: echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
@@ -71,10 +55,11 @@
 - name: "Install JDK and CMA"
   apt:
     name:
+      - oracle-j2sdk1.7
+      - oracle-j2sdk1.6
       - oracle-java8-installer
       - cloudera-manager-agent
       - ntp
     state: installed
-    update_cache: yes
     allow_unauthenticated: yes
   tags: installs

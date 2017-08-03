@@ -1,0 +1,10 @@
+#group vars
+ansible_ssh_user: "vagrant"
+ansible_ssh_pass: "vagrant"
+ansible_sudo_pass: "vagrant"
+influxdb_server: "192.168.1.31"
+grafana_server: "192.168.1.31"
+topology: "rbd"
+cluster: "2"
+test: "read"
+iteration: "1"

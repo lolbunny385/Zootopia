@@ -1,0 +1,158 @@
+---
+# tasks file for roles/galera
+#- name: add MariaDB repo
+#  apt_key:
+#    keyserver: "hkp://keyserver.ubuntu.com:80"
+#    id: "0xcbcb082a1bb943db"
+#  tags: installation
+#- apt_repository:   
+#    repo: "deb [arch=amd64,i386,ppc64el] http://mirror.poliwangi.ac.id/mariadb/repo/10.0/ubuntu trusty main"
+#    state: present
+#  tags: installation
+
+- name: Install MariaDB
+  environment:
+    DEBIAN_FRONTEND: "noninteractive"
+  apt: 
+    pkg: 
+      - mariadb-galera-server
+      - python-mysqldb
+      - libmysql-java
+      - galera
+      - rsync
+    state: installed 
+    force: yes
+    update_cache: yes
+    allow_unauthenticated: yes
+  register: installed
+  tags: installation
+
+- name: Copy Configuration
+  template: 
+    src: my.cnf.j2
+    dest: /etc/my.cnf
+    owner: root
+    group: root
+  when: installed|success
+  tags: config
+
+- name: Copy Configuration
+  template:
+    src: galera.cnf.j2
+    dest: /etc/mysql/conf.d/galera.cnf
+    owner: root
+    group: root
+  when: installed|success
+  tags: config
+
+- name: stop MariaDB
+  service:
+    name: mysql
+    state: stopped
+    enabled: yes
+  tags:
+  - setup
+  - stop
+
+- name: Bootstap new cluster
+  become_user: root
+  shell: nohup service mysql start --wsrep-new-cluster
+  when: ansible_hostname == primarynode
+  tags: setup
+
+- name: "Get debian.cnf from the master quorum server"
+  fetch:
+    src: /etc/mysql/{{ item }}
+    dest: /tmp/
+    flat: yes
+    fail_on_missing: yes
+  with_items:
+  - debian.cnf
+  when: ansible_hostname == primarynode
+  tags:
+  - debian
+
+- name: "Distribute debian.cnf to all Galera cluster nodes"
+  copy:
+    src: /tmp/{{ item }}
+    dest: /etc/mysql/
+  with_items:
+  - debian.cnf
+  tags:
+  - debian
+
+- name: Start Secondary Nodes
+  service:
+    enabled: yes
+    name: mysql
+    state: started
+  when: not ansible_hostname == primarynode
+  tags: 
+  - setup
+  - up
+
+- name: "Debug DB access"
+  shell:
+    mysql -h localhost -u root -pAa123456
+  when: ansible_hostname == primarynode
+  register: can_connect
+  ignore_errors: true
+  tags: debug
+
+- name: Secure Installation
+  when: ansible_hostname == primarynode and can_connect|failed
+  include: ./secure_installation.yml
+  tags: debug
+
+- name: "Get debian.cnf from the master quorum server"
+  fetch:
+    src: /etc/mysql/{{ item }}
+    dest: /tmp/
+    flat: yes
+    fail_on_missing: yes
+  with_items:
+  - debian.cnf
+  when: ansible_hostname == primarynode
+  tags:
+  - debian
+
+- name: "Distribute debian.cnf to all Galera cluster nodes"
+  copy:
+    src: /tmp/{{ item }}
+    dest: /etc/mysql/
+  with_items:
+  - debian.cnf
+  tags:
+  - debian
+
+- name: Create DB Tables
+  when: ansible_hostname == primarynode
+  mysql_db:
+    name: '{{ item }}'
+    login_password: Aa123456
+    encoding: UTF8
+  with_items:
+    - "{{ db_services }}"
+  tags: 
+  - tables
+  - users
+
+- name: Create Database Users
+  when: ansible_hostname == primarynode
+  mysql_user:
+    host: "%"
+    name: '{{ item }}'
+    password: '{{ item }}_password'
+    login_password: Aa123456
+    priv: "{{item}}.*:ALL"
+  with_items:
+    - "{{ db_services }}"
+  tags: users
+
+- name: Create HAproxy user
+  when: ansible_hostname == primarynode
+  mysql_user:
+    name: haproxy
+    login_password: Aa123456
+  tags: users
+

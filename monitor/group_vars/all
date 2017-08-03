@@ -1,0 +1,7 @@
+#group vars
+influxdb_server: "192.168.1.22"
+grafana_server: "192.168.1.22"
+topology: "rbd"
+cluster: "2"
+test: "read"
+iteration: "1"

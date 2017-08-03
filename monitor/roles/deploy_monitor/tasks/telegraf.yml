@@ -1,0 +1,19 @@
+---
+# tasks file for runtest
+
+- name: ensure telegraf install
+  apt:
+    name: telegraf
+    state: installed
+  tags: telegraf
+
+- name: change telegraf.conf add tagging
+  template: 
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+  tags: telegraf
+
+- name: Restart Telegraf Service
+  service:
+    name: telegraf
+    state: restarted
